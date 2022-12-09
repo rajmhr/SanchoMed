@@ -1,0 +1,85 @@
+@model FutsalGoal.Model.Models.ConfigChoiceModel
+
+<div class="modal-dialog text-medium">
+    <div class="modal-content">
+        <form asp-controller="ConfigChoice" asp-action="SaveConfigChoice" id="frmAddEditConfigChoice" data-ajax="true" data-ajax-method="POST" data-ajax-success="onSaveCategorySuccess" data-ajax-begin="onStartConfigChoice">
+
+            <div class="modal-header bg-primary text-white p-2">
+                <h6 class="modal-title w-100 text-center">
+                    @if (Model != null && Model.ConfigChoiceId != 0)
+                    {
+                        <text>Update config information !!</text>
+                    }
+                    else
+                    {
+                        <text>Add config information !!</text>
+                    }
+                </h6>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            </div>
+            <div class="modal-body">
+                @Html.HiddenFor(a => a.ConfigChoiceId)
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <label class="col-md-3 col-form-label">Category</label>
+                            <div class="col-md-9">
+                                @Html.DropDownListFor(a => a.ConfigChoiceCategoryId, Model.DrpConfigCategory.Select(n => new SelectListItem { Text = n.Category, Value = n.ConfigChoiceCategoryId.ToString() }), "Select Category", new { @class = "form-control text-small" })
+                                <span asp-validation-for="ConfigChoiceCategoryId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-3 col-form-label">Choice Code</label>
+                            <div class="col-md-9">
+                                <input asp-for="ChoiceCode" class="form-control text-small" />
+                                <span asp-validation-for="ChoiceCode" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-3 col-form-label">Description</label>
+                            <div class="col-md-9">
+                                <textarea class="form-control text-small" rows="5" asp-for="ChoiceCodeDesc"></textarea>
+                                <span asp-validation-for="ChoiceCodeDesc" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-3 col-form-label">Value</label>
+                            <div class="col-md-9">
+                                <input class="form-control text-small" rows="5" asp-for="Value"/>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-md-3 form-check-label">Is Active</label>
+                            <div class="col-md-9">
+                                <input asp-for="IsActive" class="form-check-input" />
+                                <span asp-validation-for="IsActive" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-3 col-form-label">Setup Table</label>
+                            <div class="col-md-9">
+                                <input asp-for="SetupTable" class="form-control text-small" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col">
+                        <div class="float-right">
+                            <button class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fas fa-fw fa-times mr-1"></i>Cancel</button>
+                            <button class="btn btn-sm btn-primary" type="submit" id="submit"><i class="fas fa-fw fa-save mr-1"></i> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        onStartConfigChoice();
+    });
+</script>

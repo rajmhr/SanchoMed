@@ -1,0 +1,110 @@
+﻿
+@Html.AntiForgeryToken();
+<div class="container">
+    <div class="card">
+        <div class="card-header w-100 text-center bg-primary text-white"> Admin Cache</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-xl-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title text-medium font-weight-bold"> Config choice </div>
+                            <p class="card-text text-medium"> Clear cache history </p>
+                            <button class="btn btn-primary btn-sm rounded"><i class="fas fa-remove mr-1"></i> Clear cache</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title text-medium font-weight-bold"> Config category </div>
+                            <p class="card-text text-medium"> Clear cache history </p>
+                            <button class="btn btn-primary btn-sm rounded"><i class="fas fa-remove mr-1"></i> Clear cache</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title text-medium font-weight-bold"> User detail </div>
+                            <p class="card-text text-medium"> Clear cache history </p>
+                            <button class="btn btn-primary btn-sm rounded"><i class="fas fa-remove mr-1"></i> Clear cache</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-xl-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title text-medium font-weight-bold"> Controller action</div>
+                            <p class="card-text text-medium"> Clear cache history </p>
+                            <button class="btn btn-primary btn-sm rounded"><i class="fas fa-remove mr-1"></i> Clear cache</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <hr class="bg-secondary" />
+    <div class="card">
+        <div class="card-header w-100 text-center bg-primary text-white"> Medical cache</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-xl-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title text-medium font-weight-bold"> Medical List</div>
+                            <p class="card-text text-medium"> Clear Medical List</p>
+                            <button class="btn btn-primary btn-sm rounded"><i class="fas fa-remove mr-1"></i> Clear cache</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title text-medium font-weight-bold">All NearBy Medical In District</div>
+                            <p class="card-text text-medium">Clear Medical District List </p>
+                            <button type="button" onclick="clearCache('@HelperClass.EnumCollection.AppCacheName.AllNearByMedicalInDistrict')" class="btn btn-primary btn-sm rounded"><i class="fas fa-remove mr-1"></i> Clear cache</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title text-medium font-weight-bold">Medical History Titles</div>
+                            <p class="card-text text-medium">Clear Medical District List </p>
+                            <button type="button" onclick="clearCache('@HelperClass.EnumCollection.AppCacheName.MedicalHistoryTitle')" class="btn btn-primary btn-sm rounded"><i class="fas fa-remove mr-1"></i> Clear cache</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+
+    function clearCache(cacheCode) {
+        confirmDialog("Are you sure?", (ans) => {
+            if (ans) {
+                $.ajax({
+                    url: 'Cache/ClearCache',
+                    data: AddAntiForgeryToken({ clearCode: cacheCode }),
+                    type: 'POST',
+                    success: function (data) {
+                        ShowMessage(data.success, data.message);
+                        if (data.success) {
+                            $("#tblConfigCategory").bootstrapTable('refresh');
+                        }
+                    }
+                });
+            }
+        });
+    }
+</script>

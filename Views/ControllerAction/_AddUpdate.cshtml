@@ -1,0 +1,59 @@
+@model FutsalGoal.Model.ViewModels.ControllerActionViewModel
+
+<div class="modal-dialog text-medium">
+    <div class="modal-content">
+        <form asp-controller="ControllerAction" asp-action="SaveControllerAction" id="frmAddEditControllerAction" data-ajax="true" data-ajax-method="POST" data-ajax-success="onSaveControllerActionSuccess" data-ajax-begin="onStartControllerAction">
+
+            <div class="modal-header bg-primary text-white p-2">
+                <h6 class="modal-title w-100 text-center">
+                    @if (Model != null && Model.ControllerActionId != 0)
+                    {
+                        <text>Update controller action information !!</text>
+                    }
+                    else
+                    {
+                        <text>Add controller action information !!</text>
+                    }
+                </h6>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            </div>
+            <div class="modal-body">
+                @Html.HiddenFor(a => a.ControllerActionId)
+                <div class="card shadow">
+                    <div class="card-body">
+
+                        <div class="row form-group">
+                            <label class="col-md-4 col-form-label">Controller Name</label>
+                            <div class="col-md-8">
+                                <input asp-for="ControllerName" class="form-control text-small" />
+                                <span asp-validation-for="ControllerName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-4 col-form-label">Action Name</label>
+                            <div class="col-md-8">
+                                <input class="form-control text-small"  asp-for="ActionName"/>
+                                <span asp-validation-for="ActionName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col">
+                        <div class="float-right">
+                            <button class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fas fa-fw fa-times mr-1"></i>Cancel</button>
+                            <button class="btn btn-sm btn-primary" type="submit" id="submit"><i class="fas fa-fw fa-save mr-1"></i> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        onStartControllerAction();
+    });
+</script>

@@ -1,0 +1,192 @@
+﻿
+<style>
+    .project-tab {
+    }
+
+        .project-tab #tabs {
+            background: #007b5e;
+            color: #eee;
+        }
+
+            .project-tab #tabs h6.section-title {
+                color: #eee;
+            }
+
+            .project-tab #tabs .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+                color: #0062cc;
+                background-color: transparent;
+                border-color: transparent transparent #f3f3f3;
+                border-bottom: 3px solid !important;
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+        .project-tab .nav-link {
+            border: 1px solid transparent;
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+            color: #0062cc;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+            .project-tab .nav-link:hover {
+                border: none;
+            }
+
+        .project-tab thead {
+            background: #f3f3f3;
+            color: #333;
+        }
+
+        .project-tab a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+        }
+</style>
+@Html.AntiForgeryToken()
+
+<div class="modal" id="addMedPartialView"></div>
+<section id="tabs" class="project-tab">
+    <div class="row">
+        <div class="col-md-12">
+            <nav>
+                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-loadMed-tab" data-toggle="tab" href="#nav-loadMed" role="tab" aria-controls="nav-loadMed" aria-selected="true">Load Medicine File</a>
+                    <a class="nav-item nav-link" id="nav-medicineInOrg-tab" data-toggle="tab" href="#nav-medicineInOrg" role="tab" aria-controls="nav-medicineInOrg" aria-selected="false">Available Medicine in Medical</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-loadMed" role="tabpanel" aria-labelledby="nav-loadMed-tab">
+
+                    <div class="card shadow-lg">
+                        <div class="card-body">
+                            <div id="toolbar_file" class="text-small">
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="medicineFile" aria-describedby="myInput" placeholder="Browse">
+                                        <label class="custom-file-label" for="medicineFile">Select medicine file</label>
+                                    </div>
+
+                                    <button class="btn btn-primary btn-sm text-sm-center rounded-0" id="btnloadMedicine" type="button" onclick="loadMedicineFromFile()"><i class="fas fa-upload mr-1"></i> Load to table</button>
+                                    <button type="button" class="btn btn-success btn-sm text-sm-center rounded-0" id="btnSaveMedicine" onclick="saveMedicine()"><i class="fas fa-upload mr-1"></i> Save Medicine</button>
+
+                                </div>
+
+                            </div>
+
+                            <table id="tblLoadMedicine"
+                                   data-toggle="table"
+                                   data-toolbar="#toolbar_file"
+                                   data-pagination="true"
+                                   data-virtual-scroll="true"
+                                   data-height="100vh"
+                                   data-search="true"
+                                   data-row-style="rowStyle"
+                                   data-page-size="8"
+                                   data-maintain-selected="true"
+                                   data-click-to-select="true"
+                                   data-single-select="true">
+                                <thead>
+                                    <tr>
+                                        <th data-field="Selected" data-searchable="false" data-checkbox="true"></th>
+                                        <th data-formatter="runningFormatter">S.No</th>
+                                        <th data-field="medicalCode" data-searchable="false">Medical Code</th>
+                                        <th data-field="validationType" data-sortable="true">Medicine Analysis</th>
+                                        <th data-field="medGeneralName">General Name</th>
+                                        <th data-field="medBrandName">Brand Name</th>
+                                        <th data-field="doseForm">Dose Form</th>
+                                        <th data-field="composition">Composition</th>
+                                        <th data-field="prescriptionRequired">PrescriptionRequired</th>
+
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row form-group">
+                                <div class="btn btn-danger badge badge-pill mr-2 text-medium" onclick="filterMedicine(this)">OverlappedMed</div>
+                                <div class="btn btn-secondary badge badge-pill mr-2 text-medium" onclick="filterMedicine(this)">OverlappedWithSystem</div>
+                                <div class="btn btn-secondary badge badge-pill mr-2 text-medium" onclick="filterMedicine(this)">NewMedicine</div>
+                                <div class="btn btn-secondary badge badge-pill mr-2 text-medium" onclick="filterMedicine(this)">BrandNewMedicine</div>
+                                <div class="btn btn-secondary badge badge-pill mr-2 text-medium" onclick="filterMedicine(this)">RemovingMedicine</div>
+                                <div class="btn btn-secondary badge badge-pill mr-2 text-medium" onclick="filterMedicine(this)">Duplicates</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-medicineInOrg" role="tabpanel" aria-labelledby="nav-medicineInOrg-tab">
+
+                    <div class="card shadow-lg p-1">
+                        <div class="card-body">
+                            <div class="card">
+                                <div class="card-body shadow">
+                                    <div class="row">
+                                        <div class="col-xl-6 float-left input-group">
+                                            <input id="medAvailName" class="form-control mr-1 text-small" type="text" placeholder="Enter medicine name..">
+                                            <button type="button" class="btn btn-sm btn-success rounded" onclick="searchAvailableMedicine()"><i class="fas fa-search mr-1"></i> Search</button>
+                                        </div>
+                                        <div class="col-xl-2 col-sm-12 offset-4 float-right">
+                                            <button type="button" class="form-control btn btn-sm btn-primary text-small mr-lg-5 rounded" onclick="addMedicineToOrg()"><i class="fas fa-address-card mr-1"></i> Add Medicine</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <table id="tblAvailableMedicine"
+                                   data-side-pagination="server"
+                                   data-pagination="true"
+                                   data-height="100vh"
+                                   data-buttons="btn btn-sm"
+                                   data-page-size="10"
+                                   data-maintain-selected="true"
+                                   data-click-to-select="true"
+                                   data-query-params="queryMedicines"
+                                   data-url="Medicine/GetAllMedicineOrgDetail">
+                                <thead>
+                                    <tr>
+                                        <th data-field="Selected" data-checkbox="true"></th>
+                                        <th data-formatter="runningFormatter">S.No</th>
+                                        <th data-field="drugBrandName">Brand Name</th>
+                                        <th data-field="drugGeneralName">Generic Name</th>
+                                        <th data-field="doseForm">Dose Form</th>
+                                        <th data-field="dose">Composition</th>
+                                        <th data-field="prescriptionRequired">PrescriptionRequired</th>
+
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="~/AppJs/medical-medicine-org.js"></script>
+<script type="text/javascript">
+    $(function () {
+        initLoadMedicine();
+        initAvailableMedicine();
+
+        $('.custom-file-input').on('change', function (e) {
+            var file = this.files[0];
+            if (file) {
+                var fileName = file.name;
+                var nextSibling = e.target.nextElementSibling
+                nextSibling.innerText = fileName
+            }
+        })
+    });
+    function filterMedicine(obj) {
+        var searchtext = $(obj).text();
+        $('.search :text').val("").trigger('change');
+        $('.search :text').val(searchtext).trigger('change');
+        $("#tblLoadMedicine").bootstrapTable('refresh');
+    }
+</script>

@@ -1,0 +1,94 @@
+﻿@model FutsalGoal.Model.AppModels.Doctors.MedicineDetailModel
+
+<div class="modal-dialog text-medium">
+    <form asp-controller="Medicine" asp-action="SaveMedicine" id="frmMedicine" data-ajax="true" data-ajax-method="POST" data-ajax-success="onSaveDoctorSuccess" data-ajax-begin="onStartMedicines">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-primary text-white p-2">
+                <h6 class="modal-title w-100 text-center text-medium">
+                    @if (Model != null && Model.DrugBrandId != 0)
+                    {
+                        <text>Update  generic drug information !!</text>
+                    }
+                    else
+                    {
+                        <text>Add generic drug information !!</text>
+                    }
+                </h6>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            </div>
+            <div class="modal-body">
+                <div class="card shadow mb-1">
+                    <div class="card-body">
+
+                        <input asp-for="DrugBrandId" type="hidden" />
+                        <input asp-for="DrugGenericId" type="hidden" />
+
+                        <div class="row form-group">
+                            <label class="col-sm-3 text-right col-form-label">Brand name :</label>
+                            <div class="col-sm-9">
+                                <input asp-for="MedBrandName" class="text-small form-control" />
+                                <span asp-validation-for="MedBrandName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="row form-group">
+                            <label class="col-sm-3 text-right col-form-label">Dose Type :</label>
+                            <div class="col-sm-9">
+                                <input asp-for="DoseType" class="text-small form-control" />
+                                <span asp-validation-for="DoseType" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-3 text-right col-form-label">Dose :</label>
+                            <div class="col-sm-9">
+                                <input asp-for="Dose" class="text-small form-control" />
+                                <span asp-validation-for="Dose" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row form-group" id="medOrgs">
+                            <label class="col-sm-6 col-form-label text-primary text-medium">Generic name : </label>
+                            <div class="col-sm-12 col-xs-12 col-lg-12">
+                                <select id="genericSelect" class="form-control text-small" data-url='@Url.Content("~/Medicine/GetGenerics")'></select>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col">
+                        <div class="float-right">
+                            <button class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fas fa-fw fa-times mr-1"></i>Cancel</button>
+                            <button class="btn btn-sm btn-primary" type="submit" id="submit"><i class="fas fa-fw fa-save mr-1"></i> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $(function () {
+
+        onStartMedicines();
+        loadDrugGeneric()
+           setDrugGeneric(@Json.Serialize(Model))
+
+        $('#genericSelect').on("select2:select", function (e) {
+            var medOrgId = $('#genericSelect').val();
+            console.log("select clear");
+            $('#DrugGenericId').val(medOrgId)
+        });
+
+        $('#genericSelect').on("select2:unselecting", function (e) {
+            console.log("select clear");
+            $('#DrugGenericId').val(0)
+        });
+    });
+
+</script>

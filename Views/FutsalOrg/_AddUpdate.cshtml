@@ -1,0 +1,136 @@
+﻿@model FutsalGoal.Model.AppModels.FutsalOrgModel
+
+
+<style>
+    .imgSize {
+        height: 250px
+    }
+
+    .clickable:hover {
+        cursor: inherit
+    }
+</style>
+
+<div id="orgModal" class="modal fade">
+    <div class="modal-dialog modal-lg text-small">
+        <form id="frmAdminRegister" data-ajax="true" data-ajax-method="POST">
+            <div class="modal-content">
+                @Html.AntiForgeryToken()
+                <div class="modal-header bg-primary text-white  p-2">
+                    <h6 class="modal-title w-100 text-center">
+                        Organization Information !!
+                    </h6>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                </div>
+                <div class="modal-body">
+                    <input asp-for="OrganizationId" type="hidden" />
+
+                    <div class="bs-stepper text-small" id="stepper1">
+                        <div class="bs-stepper-header" role="tablist">
+                            <!-- your steps here -->
+                            <div class="step" data-target="#basicinfo-part">
+                                <button type="button" class="step-trigger" role="tab" aria-controls="logins-part" id="logins-part-trigger">
+                                    <span class="bs-stepper-circle text-medium">1</span>
+                                    <span class="bs-stepper-label text-small">Organization basic info</span>
+                                </button>
+                            </div>
+                            <div class="line"></div>
+                            <div class="step" data-target="#information-part">
+                                <button type="button" class="step-trigger" role="tab" aria-controls="information-part" id="information-part-trigger">
+                                    <span class="bs-stepper-circle text-medium">2</span>
+                                    <span class="bs-stepper-label text-small">Image Upload</span>
+                                </button>
+                            </div>
+                            <div class="line"></div>
+                            <div class="step" data-target="#facilities-part">
+                                <button type="button" class="step-trigger" role="tab" aria-controls="facilities-part" id="facilities-part-trigger">
+                                    <span class="bs-stepper-circle text-medium">3</span>
+                                    <span class="bs-stepper-label text-small">Facilities</span>
+                                </button>
+                            </div>
+                            <div class="line"></div>
+                            <div class="step" data-target="#schedule-part">
+                                <button type="button" class="step-trigger" role="tab" aria-controls="schedule-part" id="schedule-part-trigger">
+                                    <span class="bs-stepper-circle text-medium">4</span>
+                                    <span class="bs-stepper-label text-small">Schedule</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bs-stepper-content">
+                            <!-- your steps content here -->
+                            <div id="basicinfo-part" class="content" role="tabpanel" aria-labelledby="basicinfo-part-trigger">
+                                <div id="futsalBasicInfo"></div>
+
+                            </div>
+                            <div id="information-part" class="content" role="tabpanel" aria-labelledby="information-part-trigger">
+                                <div id="futsalImages"></div>
+                            </div>
+                            <div id="facilities-part" class="content" role="tabpanel" aria-labelledby="facilities-part-trigger">
+                                <div id="facilities"></div>
+                            </div>
+                            <div id="schedule-part" class="content" role="tabpanel" aria-labelledby="schedule-part-trigger">
+                                <div id="schedule"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script src="~/AppJs/futsalOrg _basicInfo.js"></script>
+
+<script type="text/javascript">
+    var stepper;
+    $(function () {
+        onRegisterBegin();
+        stepper = new Stepper($('.bs-stepper')[0], {
+            linear: false,
+            animation: true,
+            selectors: {
+                steps: '.step',
+                trigger: '.step-trigger',
+                stepper: '.bs-stepper'
+            }
+        });
+
+
+        $("#orgModal").modal({
+            backdrop: 'static',
+            keyboard: false,
+        });
+
+        var orgId = @Model.OrganizationId;
+        loadBasicInfo(orgId);
+
+        var stepper1Node = document.querySelector('#stepper1')
+
+        stepper1Node.addEventListener('show.bs-stepper', function (event) {
+            if (event.detail.indexStep == 1) {
+                loadFutsalImages(orgId);
+            }
+            else if (event.detail.indexStep == 2) {
+                loadFacilities(orgId);
+            }
+
+           else if (event.detail.indexStep == 3) {
+                loadSchedule(orgId);
+            }
+        });
+    });
+
+
+function getOriginalModel() {
+    var data = {
+        OrganizationId: $('#OrganizationId').val(),
+        OrganizationName:  $('#Title').val()
+    };
+    return data;
+}
+
+</script>
+

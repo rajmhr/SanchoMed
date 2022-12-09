@@ -1,0 +1,108 @@
+﻿@model FutsalGoal.Model.AppModels.MedicalOrgModel
+
+<style>
+    .imgSize {
+        height: 250px
+    }
+
+    .clickable:hover {
+        cursor: inherit
+    }
+</style>
+<div id="medicalOrgModal" class="modal fade">
+    <div class="modal-dialog modal-xl text-small">
+        <form id="frmAdminRegister" data-ajax="true" data-ajax-method="POST">
+            <div class="modal-content">
+                @Html.AntiForgeryToken()
+                <div class="modal-header bg-primary text-white  p-2">
+                    <h6 class="modal-title w-100 text-center">
+                        Medical Information !!
+                    </h6>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                </div>
+                <div class="modal-body">
+                    @Html.HiddenFor(a => a.MedicalOrgId)
+                    @Html.HiddenFor(a => a.OrganizationId)
+
+                    <div class="bs-stepper text-small" id="stepper1">
+                        <div class="bs-stepper-header" role="tablist">
+                            <!-- your steps here -->
+                            <div class="step" data-target="#basicinfo-part">
+                                <button type="button" class="step-trigger" role="tab" aria-controls="logins-part" id="logins-part-trigger">
+                                    <span class="bs-stepper-circle text-medium">1</span>
+                                    <span class="bs-stepper-label text-small">Medical additional info</span>
+                                </button>
+                            </div>
+                            <div class="line"></div>
+                            <div class="step" data-target="#doctors-part">
+                                <button type="button" class="step-trigger" role="tab" aria-controls="doctors-part" id="doctors-part-trigger">
+                                    <span class="bs-stepper-circle text-medium">2</span>
+                                    <span class="bs-stepper-label text-small">Doctors Information</span>
+                                </button>
+                            </div>
+                            <div class="line"></div>
+                            <div class="step" data-target="#medicine-part">
+                                <button type="button" class="step-trigger" role="tab" aria-controls="medicine-part" id="medicine-part-trigger">
+                                    <span class="bs-stepper-circle text-medium">3</span>
+                                    <span class="bs-stepper-label text-small">Medicine Information</span>
+                                </button>
+                            </div>
+                            <div class="line"></div>
+                        </div>
+                        <div class="bs-stepper-content">
+                            <!-- your steps content here -->
+                            <div id="basicinfo-part" class="content" role="tabpanel" aria-labelledby="basicinfo-part-trigger">
+                                <div id="medicalAdditionalInfo"></div>
+
+                            </div>
+                            <div id="doctors-part" class="content" role="tabpanel" aria-labelledby="doctors-part-trigger">
+                                <div id="doctorList"></div>
+                            </div>
+                            <div id="medicine-part" class="content" role="tabpanel" aria-labelledby="medicine-part-trigger">
+                                <div id="medicineList"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="~/AppJs/medical_org_additionalInfo.js"></script>
+<script type="text/javascript">
+    var stepper;
+    $(function () {
+        stepper = new Stepper($('.bs-stepper')[0], {
+            linear: false,
+            animation: true,
+            selectors: {
+                steps: '.step',
+                trigger: '.step-trigger',
+                stepper: '.bs-stepper'
+            }
+        });
+
+        $("#medicalOrgModal").modal({
+            backdrop: 'static',
+            keyboard: false,
+        });
+
+        var orgId = @Model.MedicalOrgId;
+        loadMedicalAdditionalInfo(orgId);
+
+        var stepper1Node = document.querySelector('#stepper1')
+
+        stepper1Node.addEventListener('show.bs-stepper', function (event) {
+            if (event.detail.indexStep == 1) {
+                loadMedicalOrgDoctors(orgId);
+            }
+             else if (event.detail.indexStep == 2) {
+                loadMedicines(orgId);
+            }
+        });
+    });
+
+</script>
+

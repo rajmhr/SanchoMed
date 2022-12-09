@@ -1,0 +1,132 @@
+﻿
+@model FutsalGoal.Model.AppModels.FutsalOrgModel
+
+@Html.AntiForgeryToken()
+
+<div class="card border border-secondary mb-1">
+    <div class="card-body">
+        <div class="row form-group">
+            <label class="col-sm-3 text-right col-form-label">Platform Name</label>
+            <div class="col-sm-9">
+                <input asp-for="Title" class="text-small form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-sm-3 text-right col-form-label">Address</label>
+            <div class="col-sm-9">
+                <input asp-for="Address" class="text-small form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-sm-3 text-right col-form-label">District</label>
+            <div class="col-sm-9">
+                <select asp-for="ConfigDistrictId"
+                        asp-items="@(new SelectList(Model.DistrictList,"ConfigChoiceId","ChoiceCodeDesc"))"
+                        class="form-control text-small text-center mr-1">
+                    <option>-- Select District --</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <label class="col-sm-3 text-right col-form-label">App Type</label>
+            <div class="col-sm-9">
+                <select asp-for="ConfigAppTypeId"
+                        asp-items="@(new SelectList(Model.AppTypeConfigList,"ConfigChoiceId","ChoiceCodeDesc"))"
+                        class="form-control text-small text-center mr-1">
+                    <option>-- Select App Type --</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <label class="col-sm-3 text-right col-form-label">Price per hour</label>
+            <div class="col-sm-9">
+                <input asp-for="Pricing" class="text-small form-control" />
+                <span asp-validation-for="Pricing" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <label class="col-sm-3 text-right col-form-label">Brief descriptions</label>
+            <div class="col-sm-9">
+                <textarea asp-for="Description" class="text-small form-control" rows="3" cols="10"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-sm-3 text-right col-form-label">User notes</label>
+            <div class="col-sm-9">
+                <input asp-for="UserNote" class="text-small form-control" />
+                <span asp-validation-for="UserNote" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-sm-3 text-right col-form-label">Facebook link</label>
+            <div class="col-sm-9">
+                <input asp-for="FacebookLink" class="text-small form-control" />
+                <span asp-validation-for="FacebookLink" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-sm-3 text-right col-form-label">Official Website</label>
+            <div class="col-sm-9">
+                <input asp-for="WebSite" class="text-small form-control" />
+                <span asp-validation-for="WebSite" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-sm-3 text-right col-form-label">Office Phone :</label>
+            <div class="col-sm-9">
+                <input asp-for="OfficePhone" class="text-small form-control" />
+                <span asp-validation-for="OfficePhone" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-sm-3 text-right col-form-label">Mobile number : </label>
+            <div class="col-sm-9">
+                <input asp-for="MobileNo" class="text-small form-control" />
+                <span asp-validation-for="MobileNo" class="text-danger"></span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="card border border-primary">
+    <div class="card-body p-2">
+        <div class="row form-group">
+            <label class="col-sm-3 text-right col-form-label">Lat location</label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    @Html.TextBoxFor(a => a.LatLocation, new { @class = "text-small form-control" })
+                    <div class="input-group-append">
+                        <button class="btn btn-sm btn-primary" type="button" onclick="viewInOrgMap()">Get from map</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-sm-3 text-right col-form-label">Lon Location</label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(a => a.LonLocation, new { @class = "text-small form-control" })
+                <span asp-validation-for="LonLocation" class="text-danger"></span>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row form-group ">
+    <label class="col-sm-3 form-check-label text-right">Active</label>
+    <div class="col-sm-9 pl-4">
+        <input asp-for="IsActive" class="form-check-input" />
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div class="row form-group float-right">
+    <button type="button" class="btn btn-sm btn-success" id="btnNext" onclick="saveBasicInfo()">  Next >> </button>
+</div>

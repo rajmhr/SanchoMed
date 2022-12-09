@@ -1,0 +1,121 @@
+﻿@model FutsalGoal.Model.Models.UserRegisterModel
+
+@{
+    var rdOnly = false;
+    if (Model.UserDetailId != 0)
+    {
+        rdOnly = true;
+    }
+}
+<div class="modal-dialog">
+    <form asp-controller="UserDetail" asp-action="Register" id="frmAdminRegister" data-ajax="true" data-ajax-method="POST" data-ajax-success="onUserSuccessRegister" data-ajax-begin="onRegisterBegin">
+        <div class="modal-content">
+
+            <div class="modal-header bg-primary text-white  p-2">
+                <h6 class="modal-title w-100 text-center">
+                    User Information !!
+                </h6>
+
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            </div>
+            <div class="modal-body">
+                @Html.HiddenFor(a => a.UserDetailId)
+                @Html.HiddenFor(a => a.MedicalOrgId)
+
+
+                <div class="card mb-2 text-medium shadow">
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <label class="col-sm-3 text-right col-form-label">Full name</label>
+                            <div class="col-sm-9">
+                                @Html.TextBoxFor(a => a.DisplayName, new { @class = "form-control text-small" })
+                                @Html.ValidationMessageFor(a => a.DisplayName, null, new { @class = "text-danger" })
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-3 text-right col-form-label">Email Id</label>
+                            <div class="col-sm-9">
+                                <input asp-for="Email" class="text-small form-control" readonly="@(rdOnly)" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="row form-group ">
+                            <label class="col-sm-3 form-check-label text-right">Active</label>
+                            <div class="col-sm-9">
+                                <input asp-for="IsActive" class="form-check" />
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="row form-group">
+
+                            <label class="col-sm-3 col-form-label text-right">Role</label>
+                            <div class="col-sm-6">
+                                <select asp-for="UserRoleId"
+                                        asp-items="@(new SelectList(Model.UserRoles,"RoleId","RoleName"))"
+                                        onchange="onRoleChange()"
+                                        class="text-center form-control text-small">
+                                    <option>-- Select Role --</option>
+                                </select>
+                                <span asp-validation-for="UserRoleId"></span>
+                            </div>
+
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="row form-group" id="medOrgs">
+                            <label class="col-sm-3 text-right col-form-label text-primary text-medium">Link Medical </label>
+                            <div class="col-sm-12 col-xs-12 col-lg-12">
+                                <select id="medOrgSelect" class="form-control text-small" data-url='@Url.Content("~/MedicalOrg/GetMedicalOrgs")'></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col">
+                        <div class="float-right">
+                            <button class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fas fa-fw fa-times mr-1"></i>Cancel</button>
+                            <button class="btn btn-sm btn-primary" type="submit" id="submit"><i class="fas fa-fw fa-save mr-1"></i> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        var medOrgId = @Model.MedicalOrgId;
+
+        onRegisterBegin();
+        loadMedicalOrgs();
+
+        if (@Model.MedicalOrgId != null && @Model.MedicalOrgId != 0) {
+            setMedicalOrg(@Json.Serialize(Model));
+        }
+
+        $('#medOrgSelect').on("select2:select", function (e) {
+            var medOrgId = $('#medOrgSelect').val();
+            console.log("select clear");
+            $('#MedicalOrgId').val(medOrgId)
+        });
+
+        $('#medOrgSelect').on("select2:unselecting", function (e) {
+            console.log("select clear");
+            $('#MedicalOrgId').val(0)
+        });
+    });
+
+    function onRoleChange() {
+        var role = $('#UserRoleId :selected').text();
+        var medOrgId = $('#medOrgSelect').val();
+        showHideOrgSelect(role, medOrgId)
+    }
+  
+</script>
+

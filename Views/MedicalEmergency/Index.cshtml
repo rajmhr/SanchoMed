@@ -1,0 +1,127 @@
+﻿@model FutsalGoal.Model.AppModels.Medical.MedicalEmergencyModel
+
+@Html.AntiForgeryToken()
+
+<div>
+    <ul id="context-menu-admin-process" class="dropdown-menu dropdown-menu-sm bg-danger">
+        <li class="dropdown-item" data-val="Edit"><i class="fa fa-edit pr-1"></i> Edit</li>
+        <li class="dropdown-item text-success" data-val="ProcessNotify"><i class="fa fa-edit pr-1"></i> Process Notify</li>
+    </ul>
+</div>
+
+<div class="modal" id="emergencyPartialView"></div>
+
+<div class="container">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-medium w-100 text-center p-2">
+            <span class="float-left"> <i class="fas fa-user mr-1 "></i> Medical Emergency System !!</span>
+            <div class="float-right">
+                <button type="button" class="btn btn-sm btn-success rounded-pill text-small" onclick="addUpdateEmergency(0)"><i class="fas fa-plus mr-1"></i> Create Medical Emergency</button>
+                <button type="button" class="btn btn-sm btn-danger rounded-pill text-small" onclick="completeNotified(0)"><i class="fas fa-joint mr-1"></i>Complete notified</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="input-group col-sm-12 col-xl-12">
+                            <select asp-for="EmergencyRequestDeliveryTypeId" id="deliveryTypeId"
+                                    asp-items="@(new SelectList(Model.EmergencyRequestDeliveryStatus,"ConfigChoiceId","ChoiceCodeDesc"))"
+                                    class="form-control text-small text-center mr-1">
+                                <option>-- Select Request Type --</option>
+                            </select>
+
+                            <select asp-for="EmergencyRequestTypeId"
+                                    id="requestTypeId"
+                                    asp-items="@(new SelectList(Model.EmergencyRequestTypes,"ConfigChoiceId","ChoiceCodeDesc"))"
+                                    class="form-control text-small text-center mr-1">
+                                <option>-- Emergency Type --</option>
+                            </select>
+                            <input id="emergencyTitle" class="form-control mr-1 text-primary text-small" type="text" placeholder="Type emergency title..">
+                            <button id="btnUserSearch" class="btn btn-sm btn-success text-small rounded" onclick="searchEmergency()"><i class="fas fa-search mr-1"></i> Search</button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <hr class="bg-secondary" />
+        <div class="card text-medium">
+            <table id="tblEmergency"
+                   data-toggle="true"
+                   data-side-pagination="server"
+                   data-pagination="true"
+                   data-height="100vh"
+                   data-page-size="10"
+                   data-page-list="[1,10,20,50,200]"
+                   data-maintain-selected="true"
+                   data-click-to-select="true"
+                   data-single-select="true"
+                   data-row-style="eRowStyle"
+                   data-query-params="queryEmergency"
+                   data-url="MedicalEmergency/GetAllMedicalEmergency">
+                <thead>
+                    <tr>
+                        <th data-field="Selected" data-checkbox="true"></th>
+                        <th data-formatter="dRunningFormatter">S.No</th>
+                        <th data-field="title">Title</th>
+                        <th data-field="description">Description</th>
+                        <th data-field="requestType">Request Type</th>
+                        <th data-field="emergencyMsgStatus">Delivery status</th>
+                        <th data-field="postedOn" data-formatter="fullDateFormatter">Created On</th>
+                        <th data-field="expiringDate" data-formatter="fullDateFormatter">Expiring Date</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<environment include="Development">
+    <script src="~/AppJs/med_emergency.js"></script>
+</environment>
+<environment include="Production, Staging">
+    <script src="~/js/Bundle/medical_all.min.js"></script>
+</environment>
+
+<script type="text/javascript">
+    $(function () {
+        initTable('#tblConfigCategory');
+
+        var $table = $('#tblEmergency');
+
+        $("#tblEmergency").bootstrapTable({
+
+            beforeContextMenuRow: function (e, row, buttonElement) {
+
+                setTableWithoutContextMenu("#tblEmergency", e, "emergencyMsgId", row.emergencyMsgId);
+                if (row.emergencyMsgStatus === "Approved") {
+                    $table.bootstrapTable('showContextMenu', { event: e, contextMenu: '#context-menu-admin-process' });
+                }
+                else {
+                    $table.bootstrapTable('showContextMenu', { event: e, contextMenu: '#context-menu-action' });
+                }
+            },
+            onContextMenuItem: function (row, el) {
+                var command = $(el[0]).attr('data-val');
+                if (command === "Delete") {
+                    deleteEmergency(row.emergencyMsgId);
+                }
+                else if (command === "Edit") {
+                    addUpdateEmergency(row.emergencyMsgId);
+                }
+
+                else if (command === "ProcessNotify") {
+                    processNotify(row);
+                }
+            }
+        });
+
+        $("#emergencyTitle").keypress(function (e) {
+            if (isEnterPressed(e)) {
+                searchEmergency();
+            }
+        });
+</script>
+

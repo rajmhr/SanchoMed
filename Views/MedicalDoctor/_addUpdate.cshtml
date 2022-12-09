@@ -1,0 +1,141 @@
+﻿@model FutsalGoal.Model.AppModels.Doctors.DoctorsModel
+
+<div class="modal-dialog text-medium modal-lg">
+    <div class="modal-content">
+        <form asp-controller="MedicalDoctor" asp-action="SaveMedicalDoctor" id="frmMedicalDoctor" data-ajax="true" data-ajax-method="POST" data-ajax-success="onSaveDoctorSuccess" data-ajax-begin="onStartMedicalDoctors">
+
+            <div class="modal-header bg-primary text-white p-2">
+                <h6 class="modal-title w-100 text-center">
+                    @if (Model != null && Model.MedicalDoctorId != 0)
+                    {
+                        <text>Update doctor information !!</text>
+                    }
+                    else
+                    {
+                        <text>Add doctor information !!</text>
+                    }
+                </h6>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="card shadow-lg mb-1">
+                        <div class="card-body">
+
+                            <input asp-for="MedicalDoctorId" type="hidden" />
+                            <input asp-for="SpecializationIds" type="hidden" />
+                            <div class="row form-group">
+                                <label class="col-sm-3 text-right col-form-label">Doctors Name :</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="Name" class="text-small form-control" />
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-3 text-right col-form-label">Address :</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="Address" class="text-small form-control" />
+                                    <span asp-validation-for="Address" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-3 text-right col-form-label">District</label>
+                                <div class="col-sm-9">
+                                    <select asp-for="ConfigDistrictId"
+                                            asp-items="@(new SelectList(Model.DistrictList,"ConfigChoiceId","ChoiceCodeDesc"))"
+                                            class="form-control text-small text-center mr-1">
+                                        <option>-- Select District --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-3 text-right col-form-label">Education :</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="Education" class="text-small form-control" />
+                                    <span asp-validation-for="Education" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-3 text-right col-form-label text-primary text-medium">Specialization in: </label>
+                                <div class="col-sm-12 col-xs-12 col-lg-9">
+                                    <select id="docSpeSelect" class="form-control" data-url='@Url.Content("~/MedicalDoctor/GetDoctorsSpecialist")'></select>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-3 text-right col-form-label">Email Id :</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="EmailId" class="text-small form-control" />
+                                    <span asp-validation-for="EmailId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-3 text-right col-form-label">Contact No :</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="ContactNo" class="text-small form-control" />
+                                    <span asp-validation-for="ContactNo" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-3 text-right col-form-label">About Doc :</label>
+                                <div class="col-sm-9">
+                                    <textarea asp-for="Description" class="text-small form-control" rows="2" cols="5"></textarea>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-3 text-right col-form-label">Associated With :</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="AssociatedWith" class="text-small form-control" />
+                                    <span asp-validation-for="AssociatedWith" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-3 text-right col-form-label">Gov Verified Code :</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="GovVerifiedCode" class="text-small form-control" />
+                                    <span asp-validation-for="GovVerifiedCode" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-3 form-check-label text-right">Is Verified</label>
+                                <div class="col-sm-9 pl-4">
+                                    <input asp-for="IsVerified" class="form-check-input" />
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col">
+                        <div class="float-right">
+                            <button class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fas fa-fw fa-times mr-1"></i>Cancel</button>
+                            <button class="btn btn-sm btn-primary" type="submit" id="submit"><i class="fas fa-fw fa-save mr-1"></i> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        onStartMedicalDoctors();
+        loadDocSearch();
+        setSpecialist(@Json.Serialize(Model.DoctorsSpecialist));
+        $('#docSpeSelect').on("select2:select", function (e) {
+            console.log('selecting');
+            var selectedVals = $('#docSpeSelect').val();
+            console.log(selectedVals);
+            $('#SpecializationIds').val(selectedVals)
+        });
+    });
+
+ 
+</script>

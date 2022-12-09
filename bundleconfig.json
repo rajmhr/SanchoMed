@@ -1,0 +1,202 @@
+[
+  {
+    "outputFileName": "wwwroot/css/Bundle/libsite.css",
+    "inputFiles": [
+      "wwwroot/css/sb-admin/sb-admin-2.css",
+      "wwwroot/css/bootstrap-table/bootstrap-table.css",
+      "wwwroot/css/fontawesome-free/css/all.css",
+      "wwwroot/css/bs-stepper.css",
+      "wwwroot/css/select2.css",
+      "wwwroot/css/site.css"
+    ],
+    "minify": { "enabled": true },
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/Bundle/lib-app-main.js",
+    "inputFiles": [
+      "wwwroot/lib/jquery/dist/jquery.js",
+      "wwwroot/lib/jquery-validation/dist/jquery.validate.js",
+      "wwwroot/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js",
+      "wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js",
+
+      "wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.js",
+      "wwwroot/js/sb-admin/sb-admin-2.js",
+
+      "wwwroot/js/requiredJs/bootstrap-table.js",
+      "wwwroot/js/requiredJs/bootstrap-table-contextmenu.js",
+      "wwwroot/js/requiredJs/bootstrap-notify.js",
+
+      "wwwroot/js/requiredJs/select2.full.js",
+      "wwwroot/js/bs-steeper.js",
+
+      "wwwroot/js/requiredJs/Common.js",
+
+      "wwwroot/js/requiredJs/commonFormatter.js"
+
+
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/Bundle/futsal_all.js",
+    "inputFiles": [
+      "wwwroot/AppJs/futsalOrg.js",
+      "wwwroot/AppJs/futsalOrg _basicInfo.js",
+      "wwwroot/AppJs/facilities.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/Bundle/medical_all.js",
+    "inputFiles": [
+      "wwwroot/AppJs/medical_org.js",
+      "wwwroot/AppJs/medical_org_additionalInfo.js",
+      "wwwroot/AppJs/medical_doctor.js",
+      "wwwroot/AppJs/medical_doctor.js",
+      "wwwroot/AppJs/medical-medicine-org.js",
+      "wwwroot/AppJs/medical-org-doctor.js",
+      "wwwroot/AppJs/disease.js",
+      "wwwroot/AppJs/nutrition.js",
+      "wwwroot/AppJs/med_emergency.js",
+      "wwwroot/AppJs/job_vacancy.js"
+
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/Bundle/doctors.js",
+    "inputFiles": [
+      "wwwroot/AppJs/medical_doctor.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/Bundle/medicine.js",
+    "inputFiles": [
+      "wwwroot/AppJs/medicine.js"
+
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/Bundle/job_vacancy.js",
+    "inputFiles": [
+      "wwwroot/AppJs/job_vacancy.js"
+
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/Bundle/admin.js",
+    "inputFiles": [
+      "wwwroot/AppJs/User.js",
+      "wwwroot/AppJs/userDetail.js",
+      "wwwroot/AppJs/ConfigChoice.js",
+      "wwwroot/AppJs/ConfigChoiceCategory.js",
+      "wwwroot/AppJs/controllerAction.js"
+
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+
+  {
+    "outputFileName": "wwwroot/js/Bundle/configchoice.js",
+    "inputFiles": [
+      "wwwroot/AppJs/ConfigChoice.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/Bundle/ccCategory.js",
+    "inputFiles": [
+      "wwwroot/AppJs/ConfigChoiceCategory.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/Bundle/cAction.js",
+    "inputFiles": [
+      "wwwroot/AppJs/controllerAction.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/Bundle/user.js",
+    "inputFiles": [
+      "wwwroot/AppJs/User.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  },
+  {
+    "outputFileName": "wwwroot/js/Bundle/userDetail.js",
+    "inputFiles": [
+      "wwwroot/AppJs/userDetail.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false,
+    "includeInProject": true
+  }
+
+
+
+
+]

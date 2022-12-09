@@ -1,0 +1,111 @@
+﻿@model FutsalGoal.Model.AppModels.Doctors.DiseaseModel
+@{
+    Layout = null;
+}
+<link href="~/css/summernote.css" rel="stylesheet" />
+<script src="~/js/requiredJs/summernote.js"></script>
+
+
+@Html.AntiForgeryToken()
+
+<div class="modal-dialog modal-xl text-small">
+    <div class="modal-content">
+
+        <div class="modal-header bg-primary text-white  p-2">
+            <h6 class="modal-title w-100 text-center">
+                Disease Information !!
+            </h6>
+
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        </div>
+        <div class="modal-body">
+            <div class="card text-medium text-gray-900">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form id="frmDisease" asp-controller="Disease" asp-action="SaveDiseaseInformation" data-ajax="true" data-ajax-method="POST" data-ajax-success="onSaveDiseaseSuccess">
+                            <div class="card">
+                                <div class="card-body">
+                                    <input asp-for="DiseaseId" type="hidden" />
+                                    <input asp-for="Symptomes" type="hidden" />
+                                    <input asp-for="Dos" type="hidden" />
+                                    <input asp-for="Dont" type="hidden" />
+                                    <input asp-for="HotLineNumbers" type="hidden" />
+                                    <input asp-for="Description" type="hidden" />
+                                    <div class=" form-group ">
+                                        <label class="col-form-label">Title </label>
+                                        <div class="col-sm-9">
+                                            <input asp-for="Title" class="form-control float-left text-medium" />
+                                            <span asp-validation-for="Title" class="text-danger"></span>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="col-form-label text-right">Brief Description </label>
+                                        <div class="col-sm-9 summernote" id="description">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group ">
+                                        <label class="col-form-label text-right ">Symptomes </label>
+                                        <div class="col-sm-9">
+                                            <input asp-for="Symptomes" class="form-control float-left text-medium" />
+                                            <span asp-validation-for="Symptomes" class="text-danger"></span>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+
+            <div class="float-right">
+                <button type="submit" class="btn btn-primary btn-sm "> <i class="fas fa-plus ml-1"></i> Save </button>
+                <button type="button" data-dismiss="modal" class="btn btn-danger btn-sm "> <i class="fas fa-times mr-2"></i> Cancel </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('.summernote').summernote({
+            height: 150,   //set editable area's height
+            codemirror: { // codemirror options
+                theme: 'monokai'
+            }
+        });
+
+        $('form').each(function () {
+            if ($(this).data('validator'))
+                $(this).data('validator').settings.ignore = ".note-editor *";
+        });
+
+        $("#frmDisease").submit(function () {
+
+            $('#DiseaseRelatedVideo_DiseaseRelatedVideoId').val(0);
+
+            var code = $('#symptomes').summernote('code');
+            var plainText = $("<textarea />").html(code).text();
+            $('#Symptomes').val(plainText);
+            $('#Dos').val($('#dos').summernote('code'));
+            $('#Dont').val($('#dont').summernote('code'));
+            $('#Description').val($('#description').summernote('code'));
+            $('#HotLineNumbers').val($('#hotlineNumbers').summernote('code'));
+        });
+
+        loadEditorValues();
+    });
+
+    function loadEditorValues() {
+        var description = $("<textarea />").html('@Model.Description').text();
+        $('#description').summernote('code', '');
+        $('#description').html(escape($('#description').summernote('code', description)));
+
+}
+
+</script>
+

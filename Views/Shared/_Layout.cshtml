@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Medical Platform</title>
+    <!-- Favicons -->
+    <link href="~/images/logo.jpg" rel="icon">
+    <link href="~/images/logo.jpg" rel="apple-touch-icon">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+
+    <environment include="Development">
+        <link href="~/css/sb-admin/sb-admin-2.css" rel="stylesheet">
+        <link href="~/css/bootstrap-table/bootstrap-table.css" rel="stylesheet" />
+        <link href="~/css/fontawesome-free/css/all.min.css" rel="stylesheet" />
+        <link href="~/css/site.css" rel="stylesheet" />
+        <link href="~/css/bs-steeper.min.css" rel="stylesheet" />
+        <link href="~/css/select2.min.css" rel="stylesheet" />
+
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script src="~/js/sb-admin/sb-admin-2.js"></script>
+
+        <script src="~/js/requiredJs/bootstrap-table.js"></script>
+        <script src="~/js/requiredJs/Common.js"></script>
+        <script src="~/js/requiredJs/bootstrap-notify.js"></script>
+        <script src="~/js/requiredJs/commonFormatter.js"></script>
+
+        <script src="~/js/requiredJs/bootstrap-table-contextmenu.js"></script>
+        <script src="~/js/bs-steeper.min.js"></script>
+        <script src="~/js/requiredJs/select2.full.js"></script>
+    </environment>
+
+    <environment include="Production, Staging">
+        <link href="~/css/Bundle/libsite.min.css" rel="stylesheet" />
+        <script src="~/js/Bundle/lib-app-main.min.js"></script>
+
+        <script src="~/js/Bundle/app_common_all.min.js"></script>
+    </environment>
+</head>
+<body id="page-top">
+    <div>
+        <ul id="context-menu-action" class="dropdown-menu dropdown-menu-sm bg-gray-500">
+            <li class="dropdown-item" data-val="Edit"><i class="fa fa-edit pr-1"></i> Edit</li>
+            <hr class="m-1" />
+            <li class="dropdown-item text-danger" data-val="Delete"><i class="fa fa-trash pr-1 text-danger"></i> Delete</li>
+        </ul>
+        <ul id="context-menu-edit-delete" class="dropdown-menu dropdown-menu-sm bg-gray-500">
+            <li class="dropdown-item" data-val="Edit"><i class="fa fa-edit pr-1"></i> Edit</li>
+            <hr class="m-1" />
+            <li class="dropdown-item text-danger" data-val="Delete"><i class="fa fa-trash pr-1 text-danger"></i> Delete</li>
+        </ul>
+        <ul id="context-menu-admin" class="dropdown-menu dropdown-menu-sm bg-gray-500">
+            <li class="dropdown-item" data-val="Edit"><i class="fa fa-edit pr-1"></i> Edit</li>
+            <hr class="m-1" />
+            <li class="dropdown-item" data-val="Detail"><i class="fa fa-expand-arrows-alt pr-1"></i> Detail</li>
+            <hr class="m-1" />
+            <li class="dropdown-item text-danger" data-val="Delete"><i class="fa fa-trash pr-1 text-danger"></i> Delete</li>
+        </ul>
+
+        <ul id="context-menu-edit" class="dropdown-menu dropdown-menu-sm bg-gray-500">
+            <li class="dropdown-item" data-val="Edit"><i class="fa fa-edit pr-1"></i> Edit</li>
+        </ul>
+    </div>
+
+    <div id="loading" style="display:none; margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: rgb(215 207 207); z-index: 30001; opacity: 0.4;">
+        <div class="progress">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+        </div>
+    </div>
+
+    <div id="wrapper">
+        @await Component.InvokeAsync("Sidebar")
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                @await Component.InvokeAsync("NavDisplay")
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </div>
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span class="text-medium">Powered by &copy; <span class="text-primary font-weight-bold">KirtiBits Pvt. Ltd</span></span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+</body>
+</html>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        /*$('[data-toggle="popover"]').popover();*/
+    });
+    $(document).ajaxStart(function () {
+        $("#loading").show();
+
+    });
+    $(document).ajaxStop(function () {
+        $("#loading").hide();
+    });
+    // Toggle the side navigation
+    $("#sidebarToggle, #sidebarToggleTop").on('click', function (e) {
+        $("body").toggleClass("sidebar-toggled");
+        $(".sidebar").toggleClass("toggled");
+        if ($(".sidebar").hasClass("toggled")) {
+            $('.sidebar .collapse').collapse('hide');
+        };
+    });
+</script>

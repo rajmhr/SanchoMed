@@ -1,0 +1,78 @@
+﻿
+@model FutsalGoal.Model.AppModels.Sp_Models.FacilitiesSpModel
+
+<div class="modal" id="addupdateFacilitesPartialView"></div>
+<style>
+    .availablefacilitiesList .mappedFacilitiesList {
+        max-height: 200px;
+        margin-bottom: 10px;
+        overflow: scroll;
+        margin-bottom: 5px;
+    }
+</style>
+@Html.AntiForgeryToken()
+<div class="card shadow-lg">
+    <div class="card-header w-100 text-center bg-info text-black-50 text-medium p-2"> Mapped Facilities !!</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col float-right">
+                <button class="btn btn-sm btn-success text-small float-right" type="button" onclick="getOrgFacilities()"><i class="fas fa-history"></i> </button>
+            </div>
+        </div>
+        <div id="mappedFacilities">
+
+        </div>
+    </div>
+</div>
+
+<hr class="bg-secondary" />
+
+<div class="card shadow-lg mb-2">
+    <div class="card-body">
+        <input type="hidden" asp-for="OrganizationId" />
+        <div class="row form-group">
+            <div class="col-xl-6 input-group">
+                <input id="facilitesSearch" class="form-control text-small" placeholder="Enter facilities" />
+                <button class="btn btn-sm btn-primary text-small float-left" onclick="searchFacilites()"><i class="fas fa-plus rounded-pill"></i> Search</button>
+            </div>
+            <div class="col-xl-3 offset-3 float-left btn-group">
+                <button class="btn btn-sm btn-primary text-small float-left" onclick="addUpdateFacilities(0)"><i class="fas fa-plus rounded-pill mr-2"></i>Add Facilities</button>
+                <button class="btn btn-sm btn-secondary text-small float-right" onclick="getAvailableFacilities()"><i class="fas fa-history"></i></button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col float-right">
+
+            </div>
+        </div>
+
+        <div id="availableFacilities">
+
+        </div>
+    </div>
+</div>
+
+<div class="form-group float-right">
+    <button class="btn btn-sm btn-secondary rounded mr-2" onclick="goToStep(2)"> << Prev </button>
+    <button class="btn btn-sm btn-success rounded" onclick="goToStep(4)">  Next >> </button>
+</div>
+
+<environment include="Development">
+    <script src="~/AppJs/facilities.js"></script>
+</environment>
+
+<script type="text/javascript">
+
+    $(function () {
+        getAvailableFacilities("");
+        getOrgFacilities();
+        onStartFacilities();
+    });
+    function getModel() {
+        var data = {
+            orgId: '@Model.OrganizationId',
+        };
+        return data;
+    }
+</script>

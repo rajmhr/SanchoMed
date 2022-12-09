@@ -1,0 +1,56 @@
+﻿@model FutsalGoal.Model.AppModels.DrugGenericModel
+
+<div class="modal-dialog text-medium modal-lg">
+    <div class="modal-content">
+        <form asp-controller="Medicine" asp-action="SaveGeneric" id="frmGeneric" data-ajax="true" data-ajax-method="POST" data-ajax-success="onSaveGenericSuccess" data-ajax-begin="onStartMedicines">
+
+            <div class="modal-header bg-primary text-white p-2">
+                <h6 class="modal-title w-100 text-center text-medium">
+                    @if (Model != null && Model.DrugGenericId != 0)
+                    {
+                        <text>Update drug information !!</text>
+                    }
+                    else
+                    {
+                        <text>Add drug information !!</text>
+                    }
+                </h6>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            </div>
+            <div class="modal-body">
+                <div class="card shadow mb-1">
+                    <div class="card-body">
+
+                        <input asp-for="DrugGenericId" type="hidden" />
+
+                        <div class="row form-group">
+                            <label class="col-sm-3 text-right col-form-label">Generic name :</label>
+                            <div class="col-sm-9">
+                                <input asp-for="GenericName" class="text-small form-control" />
+                                <span asp-validation-for="GenericName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-sm-3 text-right col-form-label">Drug uses :</label>
+                            <div class="col-sm-9">
+                                <textarea asp-for="DrugUses" class="text-small form-control" cols="5" rows="5" ></textarea>
+                                <span asp-validation-for="DrugUses" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col">
+                        <div class="float-right">
+                            <button class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fas fa-fw fa-times mr-1"></i>Cancel</button>
+                            <button class="btn btn-sm btn-primary" type="submit" id="submit"><i class="fas fa-fw fa-save mr-1"></i> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,113 @@
+﻿@model FutsalGoal.Model.Models.ControllerActionModel
+
+<div class="modal" id="contrillerActionPartialView"></div>
+
+<div class="container">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-medium w-100 text-center">
+            <i class="fas fa-cog mr-1"></i> Controller Actions !!
+        </div>
+        <div class="card-body">
+            <div class="card text-medium shadow">
+                <div class="card-body">
+                    <div class="row form-group text-small">
+                        <div class="col-sm-12 col-lg-3">
+                            <select asp-for="ConfigChoiceRoleId"
+                                    asp-items="@(new SelectList(Model.ConfighchoiceList,"ConfigChoiceId","ChoiceCodeDesc"))"
+                                    onchange="loadControllerAction()"
+                                    class="form-control text-small text-center mr-1">
+                                <option>-- Select Role --</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <div class="float-right">
+                                <button type="button" onclick="addUpdateControllerAction(0)" class="btn btn-sm btn-primary rounded-pill"><i class="fas fa-fw fa-plus mr-1"></i> Add controller action</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="bg-secondary" />
+            <div class="card text-medium">
+                <table id="tblControllerAction"
+                       data-toggle="true"
+                       data-pagination="true"
+                       data-side-pagination="server"
+                       data-height="100vh"
+                       data-click-to-select="true"
+                       data-maintain-selected="true"
+                       data-show-select-title="true"
+                       data-checkbox-header="false"
+                       data-query-params="addExtraParam"
+                       data-url="ControllerAction/GetControllerActionList">
+                    <thead>
+                        <tr>
+                            <th data-field="controllerName">Controller Name</th>
+                            <th data-field="actionName">Action Name</th>
+                            <th data-field="createdDate" data-formatter="dateFormatter">CreatedDate</th>
+                            <th data-field="roleName">Role Name</th>
+                            <th data-field="isAllocated" data-checkbox="true" data-formatter="assignFormatter" data-show-select-title="true">Assign Access</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="card-footer">
+                    <button class="btn btn-sm btn-primary float-right rounded-pill" onclick="saveControllerActionToRole()"> <i class="fas fa-save mr-1"></i>Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<environment include="Development">
+    <script src="~/AppJs/controllerAction.js"></script>
+</environment>
+<environment include="Production, Staging">
+    <script src="~/js/Bundle/cAction.min.js"></script>
+</environment>
+
+<script type="text/javascript">
+    $(function () {
+
+        initTable('#tblControllerAction');
+
+        $("#tblControllerAction").bootstrapTable({
+            beforeContextMenuRow: function (e, row, buttonElement) {
+                setTableContextMenu("#tblControllerAction", e, "controllerActionId", row.controllerActionId, '#context-menu-action');
+            },
+            onContextMenuItem: function (row, el) {
+                var command = $(el[0]).attr('data-val');
+                if (command === "Delete") {
+                    deleteControllerAction(row.controllerActionId);
+                }
+                else if (command === "Edit") {
+                    addUpdateControllerAction(row.controllerActionId);
+                }
+            }
+        });
+
+        $table.on('uncheck.bs.table',
+            function (e, row, element) {
+                var roleName = "";
+                row.roleName = roleName;
+                row.configRoleId = $("#ConfigChoiceRoleId").children("option:selected").val();
+                $table.bootstrapTable('updateByUniqueId', {
+                    controllerActionId: row.controllerActionId,
+                    row: {
+                        roleName: roleName,
+
+                    }
+                })
+            });
+        $table.on('check.bs.table',
+            function (e, row, element) {
+                var roleName = $("#ConfigChoiceRoleId").children("option:selected").text();
+                row.roleName = roleName;
+                row.configRoleId = $("#ConfigChoiceRoleId").children("option:selected").val();
+                $table.bootstrapTable('updateByUniqueId', {
+                    controllerActionId: row.controllerActionId
+                })
+            });
+    });
+</script>
+

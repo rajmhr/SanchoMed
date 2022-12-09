@@ -1,0 +1,203 @@
+﻿@model FutsalGoal.Model.AppModels.Medical.MedicalEmergencyModel
+@{
+    Layout = null;
+    bool isDisabled = false;
+    bool isNotified = false;
+    if (Model.EmergencyMsgId != 0)
+    {
+        var data = Model.EmergencyRequestDeliveryStatus.FirstOrDefault(a => a.ConfigChoiceId == Model.EmergencyRequestDeliveryTypeId);
+        if (data != null)
+        {
+            isDisabled = data.ChoiceCode.Equals(HelperClass.EnumCollection.EmergencyMsgDeliveryStatus.Approved.ToString(), StringComparison.OrdinalIgnoreCase);
+            isNotified = data.ChoiceCode.Equals(HelperClass.EnumCollection.EmergencyMsgDeliveryStatus.Notified.ToString(), StringComparison.OrdinalIgnoreCase) 
+                || data.ChoiceCode.Equals(HelperClass.EnumCollection.EmergencyMsgDeliveryStatus.Completed.ToString(), StringComparison.OrdinalIgnoreCase)
+                || data.ChoiceCode.Equals(HelperClass.EnumCollection.EmergencyMsgDeliveryStatus.Rejected.ToString(), StringComparison.OrdinalIgnoreCase);
+            if (!isNotified)
+            {
+                Model.EmergencyRequestDeliveryStatus = Model.EmergencyRequestDeliveryStatus
+                    .Where(a => !a.ChoiceCode.Trim().Equals(HelperClass.EnumCollection.EmergencyMsgDeliveryStatus.Notified.ToString(), StringComparison.OrdinalIgnoreCase)
+                    && !a.ChoiceCode.Trim().Equals(HelperClass.EnumCollection.EmergencyMsgDeliveryStatus.Completed.ToString(), StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+        }
+    }
+}
+
+<div class="modal" id="mapPartialView"></div>
+
+@Html.AntiForgeryToken()
+<form id="frmEmergency" asp-controller="MedicalEmergency" asp-action="SaveEmergencyRequest" data-ajax="true" data-ajax-method="POST" data-ajax-success="onSaveEmergencySuccess">
+
+    @if (isDisabled)
+    {
+        <input asp-for="Title" type="hidden" />
+        <input asp-for="Description" type="hidden" />
+        <input asp-for="EmergencyRequestTypeId" type="hidden" />
+    }
+
+    <div class="modal-dialog modal-lg text-small">
+        <div class="modal-content">
+
+            <div class="modal-header bg-default text-gray-900 fa-bold  p-2">
+                <h6 class="modal-title w-100 text-center">
+                    Emergency Request System !!
+                </h6>
+
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            </div>
+            <div class="modal-body">
+                <div class="card text-medium text-gray-900 shadow">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <input asp-for="EmergencyMsgId" type="hidden" />
+                            <input asp-for="Lattitude" type="hidden" />
+                            <input asp-for="Longitude" type="hidden" />
+                            @if (isDisabled)
+                            {
+                                <input asp-for="PhoneNo" type="hidden" />
+                            }
+                            <div class="row form-group ">
+                                <label class="col-sm-3 text-right col-form-label">Title </label>
+
+                                <div class="col-sm-6">
+                                    <input asp-for="Title" class="form-control float-left text-medium " disabled="@isDisabled" />
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="row form-group ">
+                                <label class="col-sm-3 text-right col-form-label">Description </label>
+                                <div class="col-sm-8">
+                                    <textarea asp-for="Description" class="form-control float-left text-medium" disabled="@isDisabled" rows="3" cols="10"></textarea>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+
+                            <div class="row form-group ">
+                                <label class="col-sm-3 text-right col-form-label">Phone no </label>
+
+                                <div class="col-sm-6 text-medium">
+                                    <input asp-for="PhoneNo" class="form-control float-left text-medium " disabled="@isDisabled" />
+                                    <span asp-validation-for="PhoneNo" class="text-danger"></span>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="row form-group ">
+                                <label class="col-sm-3 text-right col-form-label">Location </label>
+
+                                <div class="col-xl-6 col-sm-6">
+                                    <input asp-for="Location" class="form-control float-left text-small" disabled />
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-xl-6 offset-xl-3 btn-group">
+                                    <button type="button" class="btn btn-sm rounded text-small btn-info mr-2" onclick="viewInMap()"><i class="fas fa-map mr-2"></i>View in Map</button>
+                            @*        @if (isNotified)
+                                    {
+                                        <button type="button" class="btn btn-sm rounded text-small btn-danger" onclick="removeLocation()"><i class="fas fa-trash mr-2"></i>Remove Location</button>
+                                    }*@
+
+                                    <button type="button" class="btn btn-sm rounded text-small btn-danger" onclick="removeLocation()"><i class="fas fa-trash mr-2"></i>Remove Location</button>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <label class="col-sm-3 text-right col-form-label">Request Type</label>
+                                <div class="col-sm-6">
+                                    <select asp-for="EmergencyRequestTypeId"
+                                            asp-items="@(new SelectList(Model.EmergencyRequestTypes, "ConfigChoiceId", "ChoiceCodeDesc"))"
+                                            class="form-control text-small text-center mr-1" disabled="@isDisabled">
+                                        <option>-- Select Request type --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            @if (Model.EmergencyMsgId != 0)
+                            {
+
+
+                                <div class="row form-group">
+                                    <label class="col-sm-3 text-right col-form-label">Delivery Status</label>
+                                    <div class="col-sm-6 text-medium">
+                                        <select asp-for="EmergencyRequestDeliveryTypeId"
+                                                asp-items="@(new SelectList(Model.EmergencyRequestDeliveryStatus, "ConfigChoiceId", "ChoiceCodeDesc"))"
+                                                class="form-control text-small text-center mr-1">
+                                            <option>-- Select status--</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group ">
+                                    <label class="col-sm-3 text-right col-form-label">Expiring After </label>
+                                    <div class="col-sm-6 text-medium">
+                                        <input asp-for="ExpirationAfterDays" class="form-control float-left text-medium" />
+                                        <span asp-validation-for="ExpirationAfterDays" class="text-danger"></span>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                @if (Model.ExpiringDate != null)
+                                {
+                                    <div class="row form-group ">
+                                        <label class="col-sm-3 text-right col-form-label">Expiring Date </label>
+                                        <div class="col-sm-6">
+                                            <input asp-for="ExpiringDate" class="form-control float-left text-medium" disabled />
+                                            <span asp-validation-for="ExpiringDate" class="text-danger"></span>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                }
+
+                                <div class="row form-group ">
+                                    <label class="col-sm-3 text-right col-form-label">Requested by </label>
+                                    <div class="col-sm-6 text-medium">
+                                        <input asp-for="DisplayName" class="form-control float-left text-medium" disabled />
+                                        <span asp-validation-for="DisplayName" class="text-danger"></span>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            }
+
+                            <div class="row form-group ">
+                                <label class="col-sm-3 text-right col-form-label text-info">Remarks </label>
+                                <div class="col-sm-8 text-medium">
+                                    <textarea asp-for="Remarks" class="form-control float-left text-medium disabled" rows="2" cols="10"></textarea>
+                                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row float-right">
+                    <div class="col float-right">
+                        <button type="button" data-dismiss="modal" class="ml-2 btn btn-danger rounded btn-sm text-small"> <i class="fas fa-times mr-1"></i> Cancel </button>
+                  @*      @if (!isNotified)
+                        {
+                            <button type="submit" class="btn btn-primary btn-sm text-small"> <i class="fas fa-plus mr-1"></i> Save </button>
+                        }*@
+                        <button type="submit" class="btn btn-primary btn-sm text-small"> <i class="fas fa-plus mr-1"></i> Save </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(function () {
+        var data = '@isNotified';
+
+    @*    if (data === 'True') {
+            $("#frmEmergency :input").prop("disabled", true);
+            $("#frmEmergency :button").prop("disabled", false);
+        }*@
+    });
+
+</script>
+

@@ -1,0 +1,68 @@
+﻿@model FutsalGoal.Model.AppModels.MedicalOrgModel
+
+@Html.AntiForgeryToken()
+
+<div class="card shadow-lg mb-1">
+    <div class="card-body">
+        <div class="row form-group ">
+            <label class="col-sm-3 form-check-label text-right">Doctors Available</label>
+            <div class="col-sm-9 pl-4">
+                <input asp-for="IsDoctorsAvailable" class="form-check-input" />
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row form-group ">
+            <label class="col-sm-3 form-check-label text-right">Delivery Service </label>
+            <div class="col-sm-9 pl-4">
+                <input asp-for="IsDeliveryAvailable" class="form-check-input" />
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row form-group">
+            <label class="col-sm-3 text-right col-form-label">Delivery notes :</label>
+            <div class="col-sm-6">
+                <textarea asp-for="DeliveryNotes" class="text-small form-control" rows="3" cols="10"></textarea>
+                <span asp-validation-for="DeliveryNotes" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-sm-3 text-right col-form-label">Medical Type </label>
+            <div class="col-sm-6">
+                <select asp-for="ConfigMedTypeId"
+                        asp-items="@(new SelectList(Model.MedicalTypeList,"ConfigChoiceId","ChoiceCodeDesc"))"
+                        class="form-control text-small text-center mr-1">
+                    <option>-- Select medical type --</option>
+                </select>
+            </div>
+        </div>
+        <div class="card border border-danger" >
+
+            <div class="row form-group ">
+                <label class="col-sm-3 form-check-label text-right">Discount Available </label>
+                <div class="col-sm-9 pl-4">
+                    <input asp-for="IsDiscountAvailable" class="form-check-input" />
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="row form-group">
+                <label class="col-sm-3 text-right col-form-label">Discount Code :</label>
+                <div class="col-sm-6">
+                    <input asp-for="DiscountCode" class="text-small form-control" />
+                    <span asp-validation-for="DiscountCode" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <label class="col-sm-3 text-right col-form-label">Discount Percentage :</label>
+                <div class="col-sm-6">
+                    <input asp-for="DiscountPercent" class="text-small form-control" />
+                    <span asp-validation-for="DiscountPercent" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-footer">
+        <button class="btn btn-sm btn-success float-right text-small" type="button" id="btnNext" onclick="saveMedicalInfo()">  Next >> </button>
+    </div>
+</div>

@@ -1,0 +1,100 @@
+﻿@model FutsalGoal.Model.AppModels.FutsalOrgModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div>
+    <ul id="context-menu-admin" class="dropdown-menu dropdown-menu-sm bg-gray-500">
+        <li class="dropdown-item" data-val="Edit"><i class="fa fa-edit pr-1"></i> Edit</li>
+        <li class="dropdown-item text-danger" data-val="Delete"><i class="fa fa-trash pr-1"></i> Delete</li>
+
+    </ul>
+</div>
+
+<div class="modal" id="genericPartialView"></div>
+<div class="container">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-medium w-100 text-center">
+            <i class="fas fa-user mr-1"></i> Generic drug listing !!
+        </div>
+        <div class="card-body">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="input-group col-sm-8">
+                            <input id="genericName" class="form-control text-medium mr-1" type="text" placeholder="Type generic drug name..">
+                            <button id="btnFutsalOrgSearch" class="btn btn-sm btn-success rounded" onclick="searchGeneric()"><i class="fas fa-search mr-1"></i> Search</button>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="float-right">
+                                <button type="button" class="btn btn-sm btn-primary rounded-pill text-small" onclick="addUpdateGeneric(0)"><i class="fas fa-plus mr-1"></i> Add Generic</button>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </div>
+        <hr class="bg-secondary" />
+        <div class="card text-medium">
+            <table id="tblGeneric"
+                   data-toggle="true"
+                   data-side-pagination="server"
+                   data-pagination="true"
+                   data-height="100vh"
+                   data-page-size="10"
+                   data-page-list="[1,10,20,50,200]"
+                   data-maintain-selected="true"
+                   data-click-to-select="true"
+                   data-single-select="true"
+                   data-query-params="queryGenericParams"
+                   data-url="/Medicine/GetAllGenericDrug">
+                <thead>
+                    <tr>
+                        <th data-field="Selected" data-checkbox="true"></th>
+                        <th data-formatter="runningFormatterGeneric">S.No</th>
+                        <th data-field="genericName">Generic name</th>
+                        <th data-field="createdDate" data-formatter="dateFormatter">Created On</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<environment include="Development">
+    <script src="~/AppJs/medicine.js"></script>
+</environment>
+
+<environment include="Production, Staging">
+    <script src="~/js/Bundle/medicine.min.js"></script>
+</environment>
+
+<script type="text/javascript">
+    $(function () {
+        var $table = $('#tblGeneric');
+        onStartGenerics();
+        $("#tblGeneric").bootstrapTable({
+
+            beforeContextMenuRow: function (e, row, buttonElement) {
+                $table.bootstrapTable('uncheckAll');;
+                $table.bootstrapTable('checkBy', { field: "drugGenericId", values: [row.drugGenericId] });
+                $table.bootstrapTable('showContextMenu', { event: e, contextMenu: '#context-menu-admin' });
+            },
+            onContextMenuItem: function (row, el) {
+                var command = $(el[0]).attr('data-val');
+                if (command === "Delete") {
+                    deleteGeneric(row.drugGenericId);
+                }
+                else if (command === "Edit") {
+                    addUpdateGeneric(row.drugGenericId);
+                }
+            }
+        });
+
+        $("#tblGeneric").bootstrapTable('scrollTo', top);
+        $('#tblGeneric').on('load-success.bs.table', function (e, data) {
+            $('#tblGeneric thead tr').css('background', '#24BBB8');
+            $('#tblGeneric thead tr').css('color', '#111111');
+        });
+    });
+</script>
+

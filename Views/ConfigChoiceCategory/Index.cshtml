@@ -1,0 +1,65 @@
+
+<div class="modal" id="categoryPartialView"></div>
+<div class="container">
+    <div class="card shadow">
+        <div class="card-header text-white text-medium bg-primary w-100 text-center">
+            <i class="fas fa-cog mr-1"></i>    Config Categories !!
+        </div>
+
+        <div class="card-body">
+            <div class="row float-right">
+                <button type="button" onclick="addUpdateConfigCategory(0)" class="btn btn-sm text-sm-center btn-primary rounded-pill"><i class="fas fa-fw fa-plus mr-1"></i> Add Category</button>
+            </div>
+        </div>
+        <div class="card text-medium">
+            <table id="tblConfigCategory"
+                   data-pagination="true"
+                   data-side-pagination="server"
+                   data-height="100vh"
+                   data-click-to-select="true"
+                   data-maintain-selected="true"
+                   data-single-select="true"
+                   data-url="ConfigChoiceCategory/GetConfigChoiceCategoryList">
+                <thead>
+                    <tr>
+                        <th data-field="Selected" data-checkbox="true"></th>
+                        <th data-field="category" data-align="left">Category</th>
+                        <th data-field="description" data-align="left">Description</th>
+                        <th data-field="isSystemChoice">System Choice</th>
+                        <th data-field="createDate">Created Date</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<environment include="Development">
+    <script src="~/AppJs/ConfigChoiceCategory.js"></script>
+</environment>
+<environment include="Production, Staging">
+    <script src="~/js/Bundle/ccCategory.min.js"></script>
+</environment>
+
+<script type="text/javascript">
+    $(function () {
+        initTable('#tblConfigCategory');
+
+        $("#tblConfigCategory").bootstrapTable({
+            beforeContextMenuRow: function (e, row, buttonElement) {
+                setTableContextMenu("#tblConfigCategory", e, "configChoiceCategoryId", row.configChoiceCategoryId, '#context-menu-action');
+            },
+            onContextMenuItem: function (row, el) {
+                var command = $(el[0]).attr('data-val');
+                console.log(command);
+                if (command === "Delete") {
+                    deleteCategory(row.configChoiceCategoryId);
+                }
+                else if (command === "Edit") {
+                    addUpdateConfigCategory(row.configChoiceCategoryId);
+                }
+            }
+        });
+    });
+</script>

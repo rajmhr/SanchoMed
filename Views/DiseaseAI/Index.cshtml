@@ -1,0 +1,82 @@
+﻿
+<div class="modal" id="diseaseAIPartialView"></div>
+<div class="container">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-medium w-100 text-center">
+            <i class="fas fa-user mr-1"></i> All disease listing !!
+        </div>
+        <div class="card-body">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="input-group col-xl-6 col-sm-12">
+                            <input id="diseaseAITitle" class="form-control text-medium mr-1 text-primary" type="text" placeholder="Type disease title">
+                            <button class="btn btn-sm btn-success" onclick="searchDisease()"><i class="fas fa-search mr-1"></i> Search</button>
+                        </div>
+                        <div class="col-xl-3 offset-3 col-sm-12" >
+                            <div class="float-right">
+                                <button type="button" class="btn btn-sm btn-primary rounded-pill text-small" onclick="addUpdateDiseaseAI(0)"><i class="fas fa-plus mr-1"></i> Create Disease</button>
+                            </div>
+                        </div>
+                    </div>
+               
+                </div>
+            </div>
+        </div>
+        <hr class="bg-secondary" />
+        <div class="card text-medium">
+            <table id="tblDiseaseAI"
+                   data-toggle="true"
+                   data-side-pagination="server"
+                   data-pagination="true"
+                   data-height="100vh"
+                   data-page-size="10"
+                   data-page-list="[1,10,20,50,200]"
+                   data-maintain-selected="true"
+                   data-click-to-select="true"
+                   data-single-select="true"
+                   data-query-params="queryDiseaseAIParams"
+                   data-url="Disease/GetAllDiseases">
+                <thead>
+                    <tr>
+                        <th data-field="Selected" data-checkbox="true"></th>
+                        <th data-formatter="dRunningFormatter">S.No</th>
+                        <th data-field="title" data-width="220">Disease title</th>
+                        <th data-field="description">Description</th>
+                        <th data-field="createdDate" data-width="120" data-formatter="dateFormatter">Created On</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<environment include="Development">
+    <script src="~/AppJs/disease_ai.js"></script>
+</environment>
+<environment include="Production, Staging">
+    <script src="~/js/Bundle/medical_all.min.js"></script>
+</environment>
+
+<script type="text/javascript">
+    $(function () {
+        initTable('#tblDiseaseAI');
+        
+        $("#tblDiseaseAI").bootstrapTable({
+
+            beforeContextMenuRow: function (e, row, buttonElement) {
+                setTableContextMenu("#tblConfigCategory", e, "diseaseId", row.diseaseId, '#context-menu-action');
+            },
+            onContextMenuItem: function (row, el) {
+                var command = $(el[0]).attr('data-val');
+                if (command === "Delete") {
+                    deleteDiseaseAI(row.diseaseId);
+                }
+                else if (command === "Edit") {
+                    addUpdateDiseaseAI(row.diseaseId);
+                }
+            }
+        });
+    });
+</script>
+

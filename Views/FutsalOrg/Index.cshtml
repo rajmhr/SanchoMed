@@ -1,0 +1,96 @@
+﻿@model FutsalGoal.Model.AppModels.FutsalOrgModel
+
+<div class="modal" id="futsalOrgPartialView"></div>
+<div class="modal" id="orgMapPartialView"></div>
+<div class="container-fluid">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-medium w-100 text-center">
+            <i class="fas fa-user mr-1"></i> Organization Listing !!
+        </div>
+        <div class="card-body">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="input-group col-sm-8">
+                            <select asp-for="ConfigDistrictId" id="configDistrict"
+                                    asp-items="@(new SelectList(Model.DistrictList,"ConfigChoiceId","ChoiceCodeDesc"))"
+                                    class="form-control text-medium text-center mr-1">
+                                <option>-- Select District --</option>
+                            </select>
+                            <input id="orgName" class="form-control text-medium mr-1" type="text" placeholder="Enter organization name">
+                            <button id="btnFutsalOrgSearch" class="btn btn-sm btn-success" onclick="searchFutsalOrg()"><i class="fas fa-search mr-1"></i> Search</button>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="float-right">
+                                <button type="button" class="btn btn-sm btn-primary rounded-pill text-small" onclick="addUpdateFutsalOrg(0)"><i class="fas fa-plus mr-1"></i> Create Organization</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="bg-secondary" />
+        <div class="card  text-medium text-gray-900">
+            <table id="tblFutsalOrg"
+                   data-side-pagination="server"
+                   data-pagination="true"
+                   data-height="100vh"
+                   data-page-size="10"
+                   data-page-list="[1,10,20,50,200]"
+                   data-maintain-selected="true"
+                   data-click-to-select="true"
+                   data-single-select="true"
+                   data-row-style="orgRowStyle"
+                   data-query-params="queryFutsalOrgParams"
+                   data-url="FutsalOrg/GetAllFutsalOrg">
+                <thead>
+                    <tr>
+                        <th data-field="Selected" data-checkbox="true"></th>
+                        <th data-formatter="runningFormatter">S.No</th>
+                        <th data-field="title" data-width="300">Org Name</th>
+                        <th data-field="address"data-width="200">Address</th>
+                        <th data-field="description">About</th>
+                        <th data-field="userNote" data-width="300">User notes</th>
+                        <th data-field="createdDate" data-width="180" data-formatter="dateFormatter">Created On</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<environment include="Development">
+    <script src="~/AppJs/futsalOrg.js"></script>
+</environment>
+<environment include="Production, Staging">
+    <script src="~/js/Bundle/futsal_all.js"></script>
+</environment>
+
+<script type="text/javascript">
+    $(function () {
+        initTable('#tblFutsalOrg');
+
+        $("#tblFutsalOrg").bootstrapTable({
+
+            beforeContextMenuRow: function (e, row, buttonElement) {
+                setTableContextMenu("#tblFutsalOrg", e, "organizationId", row.organizationId, '#context-menu-action');
+            },
+            onContextMenuItem: function (row, el) {
+                var command = $(el[0]).attr('data-val');
+                if (command === "Delete") {
+                    deleteFutsalOrg(row.organizationId);
+                }
+                else if (command === "Edit") {
+                    addUpdateFutsalOrg(row.organizationId, row.title);
+                }
+            }
+        });
+
+        $("#orgName").keypress(function (e) {
+            if (isEnterPressed(e)) {
+                searchFutsalOrg();
+            }
+        });
+    });
+</script>
+

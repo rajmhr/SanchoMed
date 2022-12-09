@@ -1,0 +1,96 @@
+﻿@model FutsalGoal.Model.AppModels.MedicalOrgModel
+
+
+@Html.AntiForgeryToken()
+
+<div class="modal" id="medicalOrgPartialView"></div>
+<div class="container-fluid">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-medium w-100 text-center">
+            <i class="fas fa-user mr-1"></i> Medical listing !!
+        </div>
+        <div class="card-body">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <input asp-for="MedicalOrgId" type="hidden" />
+                        <div class="input-group col-sm-8">
+                            <select asp-for="ConfigDistrictId" id="configDistrict"
+                                    asp-items="@(new SelectList(Model.DistrictList,"ConfigChoiceId","ChoiceCodeDesc"))"
+                                    class="form-control text-small text-center mr-1">
+                                <option>-- Select District --</option>
+                            </select>
+                            <input id="orgName" class="form-control text-medium mr-1" type="text" placeholder="Type organization name">
+                            <button id="btnFutsalOrgSearch" class="btn btn-sm btn-success" onclick="searchMedicalOrg()"><i class="fas fa-search mr-1"></i> Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="bg-secondary" />
+        <div class="card text-medium">
+            <table id="tblMedicalOrg"
+                   data-toggle="true"
+                   data-side-pagination="server"
+                   data-pagination="true"
+                   data-height="100vh"
+                   data-page-size="10"
+                   data-page-list="[1,10,20,50,200]"
+                   data-maintain-selected="true"
+                   data-click-to-select="true"
+                   data-single-select="true"
+                   data-query-params="queryMedicalOrgParams"
+                   data-url="MedicalOrg/GetAllMedicalOrg">
+                <thead>
+                    <tr>
+                        <th data-field="Selected" data-checkbox="true"></th>
+                        <th data-formatter="medRunningFormatter">S.No</th>
+                        <th data-field="title">Medical Name</th>
+                        <th data-field="address">Address</th>
+                        <th data-field="userNote">User notes</th>
+                        <th data-field="createdDate" data-formatter="dateFormatter">Created On</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<environment include="Development">
+    <script src="~/AppJs/medical_org.js"></script>
+</environment>
+<environment include="Production, Staging">
+    <script src="~/js/Bundle/medical_all.min.js"></script>
+</environment>
+
+<script type="text/javascript">
+    $(function () {
+        onRegisterBegin();
+        initTable('#tblMedicalOrg');
+        $("#tblMedicalOrg").bootstrapTable({
+
+            beforeContextMenuRow: function (e, row, buttonElement) {
+                setTableContextMenu("#tblMedicalOrg", e, "organizationId", row.organizationId, '#context-menu-edit');
+            },
+            onContextMenuItem: function (row, el) {
+                var command = $(el[0]).attr('data-val');
+                if (command === "Delete") {
+                    deleteMedicalOrg(row.organizationId);
+                }
+                else if (command === "Edit") {
+                    addUpdateMedicalOrg(row.organizationId, row.medicalOrgId, row.title);
+                }
+                else if (command === "Detail") {
+                    viewMedicalOrgDetails(row.organizationId);
+                }
+            }
+        });
+
+        $("#orgName").keypress(function (e) {
+            if (isEnterPressed(e)) {
+                searchMedicalOrg();
+            }
+        });
+    });
+</script>
+

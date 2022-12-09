@@ -1,0 +1,58 @@
+﻿@model List<FutsalGoal.Model.AppModels.OrgTimeScheduleModel>
+
+<form id="frmSchedule" data-ajax="true" data-ajax-method="POST">
+    <div class="card shadow-lg ">
+        <div class="card-body text-black-50 p-2">
+
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <input asp-for="@Model[i].OrganizationId" type="hidden" />
+                <input asp-for="@Model[i].OrgTimeScheduleId" type="hidden" />
+                <input asp-for="@Model[i].ConfigWeekId" type="hidden" />
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item rounded-pill pb-0 mb-1 border border-info">
+                        <span class="w-100 font-weight-bold text-medium text-primary">@Model[i].WeekName</span>
+                        <div class="row ">
+                            <div class="row form-group col-xl-6">
+                                <label class="col-xl-4 col-form-label text-gray-900">Start time:</label>
+                                <div class="col-xl-8">
+                                    <input asp-for="@Model[i].StartTime" class="form-control text-small" />
+                                </div>
+                            </div>
+                            <div class="row form-group col-xl-6">
+                                <label class="col-xl-4 col-form-label text-gray-900 float-left">Close time</label>
+                                <div class="col-xl-8">
+                                    <input asp-for="@Model[i].EndTime" class="form-control text-small" />
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            }
+
+        <div class="form-group float-right mt-2">
+            <button type="button" class="btn btn-sm btn-success mr-2 rounded" onclick="saveTimeSchedule()"><i class="fas fa-save mr-1"></i> Save </button>
+            <button type="button" class="btn btn-sm btn-secondary mr-2 rounded" onclick="goToStep(3)"> << Prev </button>
+            <button type="button" class="btn btn-sm btn-danger rounded" data-dismiss="modal">  Finish >> </button>
+        </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+
+    $(function () {
+
+    });
+
+    function saveTimeSchedule() {
+
+        $.ajax({
+            url: 'OrgTimeSchedule/SaveOrgTimeSchedule',
+            data: $('#frmSchedule').serialize(),
+            type: 'POST',
+            success: function (data) {
+                ShowMessage(data.success, data.message);
+            }
+        });
+    }
+</script>

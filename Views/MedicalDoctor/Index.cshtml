@@ -1,0 +1,84 @@
+﻿@model FutsalGoal.Model.AppModels.FutsalOrgModel
+
+<div class="modal" id="medicalDoctorPartialView"></div>
+<div class="container">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-medium w-100 text-center">
+            <i class="fas fa-user mr-1"></i> Medical doctors Listing !!
+        </div>
+        <div class="card-body">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="input-group col-sm-8">
+                            <input id="docName" class="form-control text-small text-center mr-1" type="text" placeholder="Type doctors name">
+                            <button id="btnFutsalOrgSearch" class="btn btn-sm btn-success" onclick="searchMedicalDoctor()"><i class="fas fa-search mr-1"></i> Search</button>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="float-right">
+                                <button type="button" class="btn btn-sm btn-primary rounded-pill text-small" onclick="addUpdateMedicalDoctor(0)"><i class="fas fa-plus mr-1"></i> Add medical doctor</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="bg-secondary" />
+        <div class="card text-medium">
+            <table id="tblMedicalDoctor"
+                   data-toggle="true"
+                   data-side-pagination="server"
+                   data-pagination="true"
+                   data-height="100vh"
+                   data-page-size="10"
+                   data-page-list="[1,10,20,50,200]"
+                   data-maintain-selected="true"
+                   data-click-to-select="true"
+                   data-single-select="true"
+                   data-query-params="queryMedicalDoctorParams"
+                   data-url="MedicalDoctor/GetAllMedicalDoctors">
+                <thead>
+                    <tr>
+                        <th data-field="Selected" data-checkbox="true"></th>
+                        <th data-formatter="runningFormatter">S.No</th>
+                        <th data-field="name">Medical Name</th>
+                        <th data-field="address">Address</th>
+                        <th data-field="emailId">Email Id</th>
+                        <th data-field="associatedWith">Associated With</th>
+                        <th data-field="education">Education</th>
+                        <th data-field="createdDate" data-formatter="dateFormatter">Created On</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<environment include="Development">
+    <script src="~/AppJs/medical_doctor.js"></script>
+</environment>
+<environment include="Production, Staging">
+    <script src="~/js/Bundle/doctors.min.js"></script>
+</environment>
+
+<script type="text/javascript">
+    $(function () {
+        initTable('#tblMedicalDoctor');
+        $("#tblMedicalDoctor").bootstrapTable({
+
+            beforeContextMenuRow: function (e, row, buttonElement) {
+                setTableContextMenu("#tblMedicalDoctor", e, "medicalDoctorId", row.medicalDoctorId, '#context-menu-action');
+            },
+            onContextMenuItem: function (row, el) {
+                var command = $(el[0]).attr('data-val');
+                if (command === "Delete") {
+                    deleteMedicalDoctor(row.medicalDoctorId);
+                }
+                else if (command === "Edit") {
+                    addUpdateMedicalDoctor(row.medicalDoctorId);
+                }
+            }
+        });
+    });
+</script>
+

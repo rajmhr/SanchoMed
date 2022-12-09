@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Login/Register</title>
+
+    <environment name="Production,Staging">
+        <link href="~/css/logins.css" rel="stylesheet" />
+    </environment>
+
+    <environment name="Development">
+        @*<link href="~/css/logins.css" rel="stylesheet" />*@
+        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    </environment>
+
+    <script src="~/js/libsite.min.js"></script>
+    <script src="~/js/bootstrap.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="~/js/bootstrap-notify.js"></script>
+    <script src="~/js/Common.js"></script>
+
+    @RenderSection("Scripts", required: false)
+</head>
+<body>
+    @*image loader*@
+    <div style=" display: none">
+        <div id="msgUserSuccess">
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <span id="msgSuccess">
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div style="display:none">
+        <div id="msgError">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <span id="msgUserError">
+
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div id="loading" style="display:none; margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: rgb(102, 102, 102); z-index: 30001; opacity: 0.8;">
+        <p style="position: fixed; color: White; top: 50%; left: 45%;">
+            Please wait...
+            <i class="fa fa-spinner" aria-hidden="true"></i>
+        </p>
+    </div>
+    @RenderBody()
+</body>
+</html>
+
+<script type="text/javascript">
+    $(document).ajaxStart(function () {
+        $("#loading").show();
+    });
+    $(document).ajaxStop(function () {
+        $("#loading").hide();
+    });
+</script>
+

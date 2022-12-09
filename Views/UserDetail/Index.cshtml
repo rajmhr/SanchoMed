@@ -1,0 +1,92 @@
+﻿@model FutsalGoal.Model.Models.UserDetailDisplayViewModel
+
+<div class="modal" id="userPartialView"></div>
+<div class="container">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-medium w-100 text-center">
+            <i class="fas fa-user mr-1"></i> User Listing !!
+        </div>
+        <div class="card-body">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="input-group col-sm-8">
+                            <select asp-for="ConfigChoiceRoleId"
+                                    asp-items="@(new SelectList(Model.ListConfigChoiceRole,"ConfigChoiceId","ChoiceCodeDesc"))"
+                                    class="form-control text-small text-center mr-1">
+                                <option>-- Select Role --</option>
+                            </select>
+                            <input id="userSearchId" class="form-control text-small text-center mr-1" type="text" placeholder="Type username or email">
+                            <button id="btnUserSearch" class="btn btn-sm btn-success" onclick="searchUser()"><i class="fas fa-search mr-1"></i> Search</button>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="float-right">
+                                <button type="button" class="btn btn-sm btn-primary rounded-pill" onclick="addUpdateUserDetail(0)"><i class="fas fa-plus mr-1"></i> Create User</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="bg-secondary" />
+        <div class="card text-medium">
+            <table id="tblUserDetail"
+                   data-side-pagination="server"
+                   data-pagination="true"
+                   data-height="100vh"
+                   data-page-size="10"
+                   data-page-list="[1,10,20,50,200]"
+                   data-maintain-selected="true"
+                   data-click-to-select="true"
+                   data-single-select="true"
+                   data-row-style="userDetailRowStyle"
+                   data-query-params="queryUserDetailParams"
+                   data-url="UserDetail/GetAllUsers">
+                <thead>
+                    <tr>
+                        <th data-field="Selected" data-checkbox="true"></th>
+                        <th data-formatter="runningFormatter">S.No</th>
+                        <th data-field="emailId">Email (Username)</th>
+                        <th data-field="displayName">Display Name</th>
+                        <th data-field="roleName">Designation</th>
+                        <th data-field="userStatus">User Status</th>
+                        <th data-field="createdDate" data-formatter="dateFormatter">Created On</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<environment include="Development">
+    <script src="~/AppJs/userDetail.js"></script>
+</environment>
+<environment include="Production, Staging">
+    <script src="~/js/Bundle/userDetail.min.js"></script>
+</environment>
+
+<script type="text/javascript">
+    $(function () {
+        initTable('#tblUserDetail');
+
+        $("#tblUserDetail").bootstrapTable({
+            beforeContextMenuRow: function (e, row, buttonElement) {
+                setTableContextMenu("#tblUserDetail", e, "emailId", row.emailId, '#context-menu-admin');
+            },
+            onContextMenuItem: function (row, el) {
+                var command = $(el[0]).attr('data-val');
+                 if (command === "Delete") {
+                     deleteUserDetail(row.userDetailId);
+                }
+                else if (command === "Edit") {
+                     addUpdateUserDetail(row.userDetailId);
+                }
+                 else if (command === "Detail") {
+                     viewUserDetails(row.userDetailId);
+                }
+            }
+        });
+    });
+</script>
+

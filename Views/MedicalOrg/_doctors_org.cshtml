@@ -1,0 +1,130 @@
+﻿
+<div class="modal" id="schedulePartialView"></div>
+<div>
+    <ul id="context-menu-doctors-available" class="dropdown-menu dropdown-menu-sm bg-gray-500">
+        <li class="dropdown-item" data-val="Map"><i class="fa fa-edit pr-1"></i> Map doctor</li>
+    </ul>
+
+    <ul id="context-menu-doctors-mapped" class="dropdown-menu dropdown-menu-sm bg-gray-500">
+        <li class="dropdown-item" data-val="Remove"><i class="fa fa-edit pr-1"></i>Remove Doctor</li>
+        <li class="dropdown-item" data-val="Schedule"><i class="fas fa-calendar pr-1"></i>Update schedule </li>
+    </ul>
+</div>
+
+<section id="tabs" class="project-tab">
+    <div class="row">
+        <div class="col-md-12">
+            <nav>
+                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-loadAvailabeDoc-tab" data-toggle="tab" href="#nav-loadAvailabeDoc" role="tab" aria-controls="nav-loadAvailabeDoc" aria-selected="true">Doctor Listing</a>
+                    <a class="nav-item nav-link" id="nav-assignedDoc-tab" data-toggle="tab" href="#nav-assignedDoc" role="tab" aria-controls="nav-assignedDoc" aria-selected="false">Doctors in Organization</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-loadAvailabeDoc" role="tabpanel" aria-labelledby="nav-loadAvailabeDoc-tab">
+
+                    <div class="card shadow-lg">
+                        <div class="card-body">
+
+                            <div id="toolbar">
+                                <div class="input-group">
+                                    <input id="availDocName" class="form-control text-small mr-1" type="text" placeholder="Enter doctors name">
+                                    <button class="btn btn-sm btn-success rounded text-sm-center" type="button" onclick="searchAvailDoctor()"><i class="fas fa-search mr-1"></i> Search</button>
+                                </div>
+                            </div>
+
+                            <table id="tblAvailDoctor"
+                                   data-toggle="true"
+                                   data-toolbar="#toolbar"
+                                   data-side-pagination="server"
+                                   data-pagination="true"
+                                   data-height="100vh"
+                                   data-buttons="btn btn-sm"
+                                   data-show-refresh="true"
+                                   data-page-size="10"
+                                   data-maintain-selected="true"
+                                   data-click-to-select="true"
+                                   data-single-select="true"
+                                   data-query-params="queryAvailableDoctorParams"
+                                   data-url="MedicalDoctor/GetAllMedicalDoctors">
+                                <thead>
+                                    <tr>
+                                        <th data-field="Selected" data-checkbox="true"></th>
+                                        <th data-field="name">Medical Name</th>
+                                        <th data-field="education">Education</th>
+                                        <th data-field="address">Address</th>
+                                        <th data-field="associatedWith">Associated With</th>
+
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="tab-pane fade" id="nav-assignedDoc" role="tabpanel" aria-labelledby="nav-assignedDoc-tab">
+
+                    <div class="card shadow-lg p-1">
+                        <div class="card-body">
+
+                            <div id="toolbar_mapped">
+                                <div class="input-group ">
+                                    <input id="mappedDocName" class="form-control text-small text-center mr-1" type="text" placeholder="Enter doctors name">
+                                    <button id="btnFutsalOrgSearch" type="button" class="btn btn-sm btn-success rounded" onclick="searchMappedDoctor()"><i class="fas fa-search mr-1"></i> Search</button>
+                                </div>
+                            </div>
+
+                            <table class="pt-1" id="tblMappedDoctor"
+                                   data-toggle="true"
+                                   data-toolbar="#toolbar_mapped"
+                                   data-side-pagination="server"
+                                   data-pagination="true"
+                                   data-height="100vh"
+                                   data-buttons="btn btn-sm"
+                                   data-show-refresh="true"
+                                   data-page-size="10"
+                                   data-maintain-selected="true"
+                                   data-click-to-select="true"
+                                   data-single-select="true"
+                                   data-query-params="queryMappedDocParams"
+                                   data-url="MedicalDoctor/GetAllMappedMedicalDoctors">
+                                <thead>
+                                    <tr>
+                                        <th data-field="Selected" data-checkbox="true"></th>
+                                        <th data-field="name">Medical Name</th>
+                                        <th data-field="education">Education</th>
+                                        <th data-field="address">Address</th>
+                                        <th data-field="associatedWith">Associated With</th>
+                                        <th data-field="availableTime">Schedule</th>
+
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="~/AppJs/medical-org-doctor.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        initMappedDoctor();
+        initAvailableDoctor();
+    });
+
+    function queryMappedDocParams(params) {
+        var searchItem = $('#mappedDocName').val();
+        params.docName = searchItem;
+        params.medOrgId = $('#MedicalOrgId').val();
+        return params;
+    }
+
+
+
+</script>

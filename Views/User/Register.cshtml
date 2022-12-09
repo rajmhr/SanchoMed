@@ -1,0 +1,111 @@
+﻿@model FutsalGoal.Model.Models.UserRegisterModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Platform-x</title>
+    <!-- Custom fonts for this template-->
+    <link href="~/css/sb-admin/sb-admin-2.css" rel="stylesheet">
+    <link href="~/css/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    @*<link href="~/css/fontawesome-free/css/all.min.css" rel="stylesheet" />*@
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+</head>
+<body class="bg-gradient-primary">
+    @if (ViewBag.Message != null)
+    {
+        <div class="row">
+            @if (ViewBag.Success)
+            {
+                <div class="alert alert-success alert-dismissible fade show text-justify" role="alert">
+                    <strong>Congrats!! : </strong> @ViewBag.Message
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger alert-dismissible fade show text-justify" role="alert">
+                    <strong>Oops!! : </strong> @ViewBag.Message
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+        </div>
+    }
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-6 col-lg-12 col-md-9">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                            </div>
+                            <form class="user" asp-controller="User" asp-action="Register" id="frmRegisterUser">
+                                <div class="form-group">
+                                    <input asp-for="DisplayName" class="form-control form-control-user" placeholder="Full name" />
+                                    <span asp-validation-for="DisplayName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input asp-for="Email" class="form-control form-control-user" placeholder="Your email address" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input asp-for="Password" class="form-control form-control-user" placeholder="Password" />
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                                <input type="submit" class="btn btn-primary btn-user btn-block" value="Register Account" />
+
+                            </form>
+                            <hr>
+                            <div class="text-center">
+                                <a asp-action="ForgetPassword" asp-controller="User" class="small">Forgot Password?</a>
+                            </div>
+                            <div class="text-center">
+                                <a asp-action="Login" asp-controller="User" class="small">Already have an account? Login!</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@section scripts{
+    <script src="~/AppJs/User.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            clearForm();
+        });
+        function onGoBack() {
+            parent.history.back();
+            return false;
+        }
+    </script>
+}
+    <environment include="Development">
+        <!-- Bootstrap core JavaScript-->
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <!-- Custom scripts for all pages-->
+    </environment>
+    <environment include="Production, Staging">
+        <script src="~/js/Bundle/lib-app-main.min.js"></script>
+    </environment>
+

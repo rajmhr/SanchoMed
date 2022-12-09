@@ -1,0 +1,56 @@
+﻿
+@model FutsalGoal.Model.AppModels.FacilitiesModel
+
+@Html.AntiForgeryToken()
+
+<div class="modal-dialog text-medium" id="facilitesModal">
+    <div class="modal-content">
+        <form  id="frmAddEditFacilities">
+
+            <div class="modal-header bg-primary text-white p-2">
+                <h6 class="modal-title w-100 text-center">
+                    @if (Model != null && Model.FacilitiesId != 0)
+                    {
+                        <text>Update faciliteis information!!</text>
+                    }
+                    else
+                    {
+                        <text>Add facilites information !!</text>
+                    }
+                </h6>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            </div>
+            <div class="modal-body">
+                @Html.HiddenFor(a => a.FacilitiesId)
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <label class="col-md-3 col-form-label">Description</label>
+                            <div class="col-md-9">
+                                <input asp-for="Description" id="inputDescription" class="form-control text-small" />
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col">
+                        <div class="float-right">
+                            <button class="btn btn-sm btn-danger" onclick="$('#addupdateFacilitesPartialView').hide()" type="button"><i class="fas fa-fw fa-times mr-1"></i>Cancel</button>
+                            <button class="btn btn-sm btn-primary" type="button" onclick="saveFacilities()" ><i class="fas fa-fw fa-save mr-1"></i> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+         $('#facilitesModal').css("margin-top", $(window).height() / 2 - $('.modal-content').height() / 2);
+    });
+</script>
+

@@ -1,0 +1,97 @@
+﻿<link href="~/css/leaflet.css" rel="stylesheet" />
+<link href="~/css/Control.Geocoder.css" rel="stylesheet" />
+
+<script src="~/js/leaflet-src.js"></script>
+<script src="~/js/Control.Geocoder.js"></script>
+
+<style type="text/css">
+    #map {
+        position: absolute;
+        width: 97%;
+        height: 500px;
+    }
+
+    #mapBody {
+        height: 530px;
+    }
+</style>
+
+<div class="modal-dialog modal-xl" style="z-index:110000000 !important">
+    <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+            <h6 class="modal-title">
+                Pick futsal location..
+            </h6>
+        </div>
+        <div class="modal-body" id="mapBody">
+            <div id="map"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeModal()"> Cancel </button>
+            <button type="button" class="btn btn-sm btn-primary" onclick="getlatlng()"> Get Location.. </button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var map = L.map('map', {
+        center: [27.6778, 85.2740277],
+        zoom: 18
+    });
+    var lat, lng;
+
+    function loadMap() {
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var marker = L.marker([27.6778, 85.2740277]).addTo(map);
+
+        map.on('click', function (e) {
+            if (marker != undefined)
+                map.removeLayer(marker);
+            marker = L.marker(e.latlng).addTo(map).on('click', function () {
+                console.log('hawa');
+            });
+
+            
+            lat = e.latlng.lat;
+            lng = e.latlng.lng;
+        });
+
+        var geocoder = L.Control.Geocoder.nominatim();
+        if (URLSearchParams && location.search) {
+            // parse /?geocoder=nominatim from URL
+            var params = new URLSearchParams(location.search);
+            var geocoderString = params.get('geocoder');
+            if (geocoderString && L.Control.Geocoder[geocoderString]) {
+                console.log('Using geocoder', geocoderString);
+                geocoder = L.Control.Geocoder[geocoderString]();
+            } else if (geocoderString) {
+                console.warn('Unsupported geocoder', geocoderString);
+            }
+        }
+
+        var control = L.Control.geocoder({
+            geocoder: geocoder
+        }).addTo(map);
+    }
+
+    $(document).ready(function () {
+        loadMap();
+
+        $('#orgMapPartialView').on('shown.bs.modal', function () {
+            setTimeout(function () {
+                map.invalidateSize();
+            }, 1);
+        });
+    });
+
+    function getlatlng() {
+        $('#LatLocation').val(lat);
+        $('#LonLocation').val(lng);
+        $('#orgMapPartialView').modal('hide');
+    }
+    function closeModal() {
+        $('#orgMapPartialView').modal('hide');
+    }
+</script>

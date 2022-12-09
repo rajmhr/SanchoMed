@@ -1,0 +1,90 @@
+﻿@model FutsalGoal.Model.AppModels.Doctors.MedicineOrgModel
+
+@Html.AntiForgeryToken()
+<div class="modal-dialog modal-lg text-small shadow-lg" id="myModal">
+    <form asp-controller="Medicine" asp-action="AddMedicineOrg" id="frmAddMedicine" data-ajax="true" data-ajax-method="POST">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary text-white  p-2 text-sm-center">
+                <h6 class="modal-title w-100 text-center">
+                    <text>Link drug to medical !!</text>
+                </h6>
+            </div>
+            <div class="modal-body">
+                @Html.HiddenFor(a => a.DrugBrandId)
+                @Html.HiddenFor(a => a.DrugOrgDetailId)
+                <div class="card shadow-lg mb-1">
+                    <div class="card-body">
+
+                        <div class="row form-group">
+                            <label class="col-sm-3 col-form-label text-primary text-medium">Link Drug: </label>
+                            <div class="col-sm-12 col-xs-12 col-lg-12">
+                                <select id="medSelect" class="form-control" data-url='@Url.Content("~/Medicine/GetMedicine")'></select>
+                            </div>
+                        </div>
+                        <div class="row form-group ">
+                            <label class="col-sm-3 text-right col-form-label">General name : </label>
+                            <div class="col-sm-6 ">
+                                <input asp-for="MedGeneralName" class="form-control text-small" readonly />
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="row form-group ">
+                            <label class="col-sm-3 text-right col-form-label">Brand name : </label>
+                            <div class="col-sm-6">
+                                <input asp-for="MedBrandName" class="form-control text-small" readonly />
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="row form-group ">
+                            <label class="col-sm-3 text-right col-form-label">Dose Type: </label>
+                            <div class="col-sm-6">
+                                <input asp-for="DoseForm" class="form-control text-small" readonly />
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="row form-group ">
+                            <label class="col-sm-3 text-right col-form-label">Dose : </label>
+                            <div class="col-sm-6">
+                                <input asp-for="Composition" class="form-control text-small" readonly />
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <div class="row">
+                    <div class="col">
+                        <div class="float-right ">
+                            <button class="btn btn-sm btn-danger text-small" type="button" onclick="closeModal()"><i class="fas fa-fw fa-times mr-1"></i>Cancel</button>
+                            <button class="btn btn-sm btn-primary text-small" type="button" onclick="saveMedicineManual()"><i class="fas fa-fw fa-save mr-1"></i> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('#myModal').css("margin-top", $(window).height() / 2 - $('.modal-content').height() / 2 + 100);
+        loadDrugSearch();
+        onStartAddMedicine();
+        setDrugOrg(@Json.Serialize(Model));
+
+        $('#medSelect').on('select2:select', function (e) {
+            var data = e.params.data;
+            console.log(data.id);
+            $('#MedGeneralName').val(data.medGeneralName);
+            $('#MedBrandName').val(data.medBrandName);
+            $('#DoseForm').val(data.doseForm);
+            $('#Composition').val(data.composition);
+            $('#DrugBrandId').val(data.id);
+        });
+    });
+
+</script>

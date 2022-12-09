@@ -1,0 +1,115 @@
+﻿@model FutsalGoal.Model.SpModels.UserViewDetailSpModel
+
+<div class="modal-dialog modal-xl">
+    <div class="modal-content">
+
+        <div class="modal-header bg-primary text-white">
+            <h6 class="modal-title">
+                User informations
+            </h6>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        </div>
+        <div class="modal-body">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">Email (Username) : </label>
+                                <div class="col-sm-8">
+                                    <input asp-for="Email" class="form-control text-small" readonly />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">Display name : </label>
+                                <div class="col-sm-8">
+                                    <input asp-for="DisplayName" class="form-control text-small" readonly />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">Created date : </label>
+                                <div class="col-sm-8">
+                                    <input asp-for="JoinedDate" class="form-control text-small" readonly />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">Libray card no : </label>
+                                <div class="col-sm-8">
+                                    <input asp-for="LibraryCardNo" class="form-control text-small" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">Account status : </label>
+                                <div class="col-sm-8">
+                                    <input asp-for="AccoutStatus" class="form-control text-small" readonly />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">Last payment date:</label>
+                                <div class="col-sm-8">
+                                    <input asp-for="PaymentStartDate" class="form-control text-small" readonly />
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-4 col-form-label">Expiring date:</label>
+                                <div class="col-sm-8">
+                                    <input asp-for="PaymentEndDate" class="form-control text-small" readonly />
+                                </div>
+                            </div>
+                            @foreach (var item in Model.PaymentOffers.Distinct())
+                            {
+                                <div class="row form-group">
+                                    <label class="col-sm-4 col-form-label">@item.Item1</label>
+                                    <div class="col-sm-8">
+                                        <input asp-for="@item.Item2" class="form-control text-small" readonly />
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="card">
+                        <div class="card-header bg-secondary text-white">Authorized documents..</div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <img class="card-img-top" src="@Model.FrontImage" alt="No Image">
+                                            <p class="text-gray-900">
+                                                Front Image
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <img class="card-img-top" src="@Model.BackImage" alt="No Image">
+                                        <p class="text-gray-900">
+                                            Back Image
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row">
+                <div class="col">
+                    <div class="float-right">
+                        <button class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fas fa-fw fa-times mr-1"></i>Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

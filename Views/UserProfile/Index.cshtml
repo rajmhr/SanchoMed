@@ -1,0 +1,38 @@
+﻿@model FutsalGoal.Model.ViewModels.UserProfileViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container container-fluid">
+    <div class="card shadow text-medium text-gray-900">
+        <div class="card-header w-100 text-center text-medium text-white bg-primary">
+            <i class="fas fa-user mr-1"></i>  My Profile
+        </div>
+        <div class="card-body">
+            <div class="row form-group">
+                <label class="col-form-label col-sm-4 text-right"> Full Name </label>
+                <div class="col-sm-6">
+                    <input asp-for="UserDisplayName" readonly class="form-control text-medium" />
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-form-label col-sm-4 text-right"> Email Id</label>
+                <div class="col-sm-6">
+                    <input asp-for="EmailId" readonly class="form-control text-medium" />
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-form-label col-sm-4 text-right"> User Status </label>
+                <div class="col-sm-6">
+                    <input asp-for="UserStatus" readonly class="form-control text-medium" />
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-form-label col-sm-4 text-right"> Created on </label>
+                <div class="col-sm-6">
+                    <input asp-for="CretedDate.Value.Date" readonly class="form-control text-medium" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

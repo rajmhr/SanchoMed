@@ -1,0 +1,86 @@
+﻿@model FutsalGoal.Model.AppModels.FutsalOrgModel
+
+
+<div class="modal" id="medicinePartialView"></div>
+<div class="container">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-medium w-100 text-center">
+            <i class="fas fa-user mr-1"></i> Medicine Listing !!
+            <a asp-controller="Medicine" asp-action="IndexGeneric" class="btn btn-sm btn-secondary rounded-pill text-medium float-right">Generic Drug</a>
+        </div>
+        <div class="card-body">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="input-group col-sm-8">
+                            <input id="medName" class="form-control text-medium mr-1" type="text" placeholder="Type drug name..">
+                            <button id="btnFutsalOrgSearch" class="btn btn-sm btn-success" onclick="searchMedicine()"><i class="fas fa-search mr-1"></i> Search</button>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="float-right">
+                                <button type="button" class="btn btn-sm btn-primary rounded-pill text-small" onclick="addUpdateMedicine(0)"><i class="fas fa-plus mr-1"></i> Add medicine</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="bg-secondary" />
+        <div class="card text-medium">
+            <table id="tblMedicine"
+                   data-toggle="true"
+                   data-side-pagination="server"
+                   data-pagination="true"
+                   data-height="100vh"
+                   data-page-size="10"
+                   data-page-list="[1,10,20,50,200]"
+                   data-maintain-selected="true"
+                   data-click-to-select="true"
+                   data-single-select="true"
+                   data-query-params="queryMedicineParams"
+                   data-url="Medicine/GetAllMedicines">
+                <thead>
+                    <tr>
+                        <th data-field="Selected" data-checkbox="true"></th>
+                        <th data-formatter="runningFormatter">S.No</th>
+                        <th data-field="medBrandName" data-align="center">Brand name</th>
+                        <th data-field="medGeneralName">Generic name</th>
+                        <th data-field="doseForm">Dose Type</th>
+                        <th data-field="dose">Dose</th>
+                        <th data-field="createdDate" data-formatter="dateFormatter">Created On</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<environment include="Development">
+    <script src="~/AppJs/medicine.js"></script>
+</environment>
+
+<environment include="Production, Staging">
+    <script src="~/js/Bundle/medicine.min.js"></script>
+</environment>
+
+<script type="text/javascript">
+    $(function () {
+        initTable('#tblMedicine');
+        $("#tblMedicine").bootstrapTable({
+
+            beforeContextMenuRow: function (e, row, buttonElement) {
+                setTableContextMenu("#tblMedicine", e, "drugBrandId", row.drugBrandId, '#context-menu-action');
+            },
+            onContextMenuItem: function (row, el) {
+                var command = $(el[0]).attr('data-val');
+                if (command === "Delete") {
+                    deleteMedicine(row.drugBrandId);
+                }
+                else if (command === "Edit") {
+                    addUpdateMedicine(row.drugBrandId);
+                }
+            }
+        });
+    });
+</script>
+

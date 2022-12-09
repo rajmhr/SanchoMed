@@ -1,0 +1,32 @@
+﻿@model IEnumerable<FutsalGoal.Model.AppModels.Sp_Models.FacilitiesSpModel>
+@Html.AntiForgeryToken()
+<div class="row availablefacilitiesList">
+    @if (Model.Any())
+    {
+        @foreach (var item in Model)
+        {
+            <ul class="list-group list-group-flush  col-xl-6 mt-2">
+
+                <li class="list-group-item list-group-item-info rounded-pill d-flex justify-content-between">
+                    <span class="badge badge-danger badge-pill text-center clickable" onclick="deleteFacilities('@item.FacilitiesId', this)">
+                        <i class="fas fa-trash "></i>
+                    </span>
+                    @item.Description
+                    <span class="badge badge-success badge-pill clickable" onclick="addToOrgFacilities('@item.FacilitiesId', '@item.Description')">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                </li>
+
+            </ul>
+        }
+    }
+    else
+    {
+        <ul class="list-group list-group-flush noFacilities col-xl-12 text-medium">
+            <li class="list-group-item">
+                <span class="text-danger"><i class="fas fa-server mr-2"></i> Oops!! No facilities available. Please add to start.</span>
+
+            </li>
+        </ul>
+    }
+</div>

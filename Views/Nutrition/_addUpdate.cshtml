@@ -1,0 +1,123 @@
+﻿@model FutsalGoal.Model.Models.NutritionModel
+@{
+    Layout = null;
+}
+<link href="~/css/summernote.css" rel="stylesheet" />
+<script src="~/js/requiredJs/summernote.js"></script>
+
+
+@Html.AntiForgeryToken()
+
+<div class="modal-dialog modal-lg text-small">
+    <div class="modal-content">
+
+        <div class="modal-header bg-primary text-white  p-2">
+            <h6 class="modal-title w-100 text-center">
+                Nutrition Information !!
+            </h6>
+
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        </div>
+        <div class="modal-body">
+            <div class="card text-medium text-gray-900">
+                <form id="frmNutrition" asp-controller="Nutrition" asp-action="SaveNutritionInformation" data-ajax="true" data-ajax-method="POST" data-ajax-success="onSaveNutritionSuccess">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <input asp-for="NutritionId" type="hidden" />
+                            <input asp-for="ImageUrl" type="hidden" />
+                            <div class="row form-group ">
+                                <label class="col-sm-3 text-right col-form-label">Title </label>
+                                <div class="col-sm-6">
+                                    <input asp-for="Title" class="form-control float-left text-medium" />
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-3 text-right col-form-label">Food type</label>
+                                <div class="col-sm-9">
+                                    <select asp-for="ConfigFoodTypeId"
+                                            asp-items="@(new SelectList(Model.FoodTypes,"ConfigChoiceId","ChoiceCodeDesc"))"
+                                            class="form-control text-small text-center mr-1">
+                                        <option>-- Select Food type --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label class="col-form-label text-right">Nutrition Detail</label>
+                                <div class="col-sm-9 summernote" id="nutDetail">
+                                </div>
+                            </div>
+
+                            <div class="form-group ">
+                                <label class="col-form-label text-right">Description</label>
+                                <div class="col-sm-9 summernote" id="description">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-6">
+                                    <div id="nutImage">
+                                        <img src="@Model.DisplayImage" width="100" height="100" alt="No Image" />
+                                    </div>
+
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="imgNutrition" onchange="fileNutrition(this)" lang="es">
+                                        <label class="custom-file-label" id="fileName" for="ImageUrl">Select Image </label>
+                                    </div>
+                                </div>
+                                @*<span class="btn-group">
+                                        <span class="btn btn-secondary btn-sm btn-file">
+                                            <input type="file" class="custom-file-input" id="imgNutrition" onchange="fileNutrition(this)">
+                                        </span>
+                                    </span>*@
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-sm-2 form-check-label text-right text-danger">Is Active</label>
+                                <div class="col-sm-4 pl-4">
+                                    <input asp-for="IsActive" class="form-check-input" />
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="row float-right">
+                                <div class="col float-right">
+                                    <button type="button" data-dismiss="modal" class="ml-2 btn btn-danger rounded btn-sm"> <i class="fas fa-times mr-1"></i> Cancel </button>
+                                    <button type="button" onclick="saveNutrition()" class="btn btn-primary btn-sm "> <i class="fas fa-plus mr-1"></i> Save </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('.summernote').summernote({
+            height: 150,   //set editable area's height
+            codemirror: { // codemirror options
+                theme: 'monokai'
+            }
+        });
+
+        $('form').each(function () {
+            if ($(this).data('validator'))
+                $(this).data('validator').settings.ignore = ".note-editor *";
+        });
+
+        loadEditorValues();
+    });
+    function loadEditorValues() {
+        var description = $("<textarea />").html('@Model.Description').text();
+        $('#description').summernote('code', '');
+        $('#description').html(escape($('#description').summernote('code', description)));
+
+        var nutDetail = $("<textarea />").html('@Model.Nutritions').text();
+        $('#nutDetail').summernote('code', '');
+        $('#nutDetail').html(escape($('#nutDetail').summernote('code', nutDetail)));
+    }
+
+
+</script>
+

@@ -1,0 +1,196 @@
+﻿@model FutsalGoal.Model.AppModels.Doctors.DiseaseModel
+@{
+    Layout = null;
+}
+<link href="~/css/summernote.css" rel="stylesheet" />
+<script src="~/js/requiredJs/summernote.js"></script>
+
+
+@Html.AntiForgeryToken()
+
+<div class="modal-dialog modal-xl text-small">
+    <div class="modal-content">
+
+        <div class="modal-header bg-primary text-white  p-2">
+            <h6 class="modal-title w-100 text-center">
+                Disease Information !!
+            </h6>
+
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        </div>
+        <div class="modal-body">
+            <div class="card text-medium text-gray-900">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <form id="frmDisease" asp-controller="Disease" asp-action="SaveDiseaseInformation" data-ajax="true" data-ajax-method="POST" data-ajax-success="onSaveDiseaseSuccess">
+                            <div class="card border border-primary">
+                                <div class="card-header w-100 text-center text-white bg-secondary"> Basic information !!</div>
+                                <div class="card-body">
+                                    <input asp-for="DiseaseId" type="hidden" />
+                                    <input asp-for="Symptomes" type="hidden" />
+                                    <input asp-for="Dos" type="hidden" />
+                                    <input asp-for="Dont" type="hidden" />
+                                    <input asp-for="HotLineNumbers" type="hidden" />
+                                    <input asp-for="Description" type="hidden" />
+                                    <div class=" form-group ">
+                                        <label class="col-form-label">Title </label>
+                                        <div class="col-sm-9">
+                                            <input asp-for="Title" class="form-control float-left text-medium" />
+                                            <span asp-validation-for="Title" class="text-danger"></span>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="col-form-label text-right">Brief Description </label>
+                                        <div class="col-sm-9 summernote" id="description">
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="col-form-label text-right">Hotline Numbers (comma seperated)</label>
+                                        <div class="col-sm-9 summernote" id="hotlineNumbers">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group ">
+                                        <label class="col-form-label text-right ">Symptomes </label>
+                                        <div class="col-sm-9 summernote" id="symptomes">
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="col-form-label text-right">What to do ?</label>
+                                        <div class="col-sm-9 summernote" id="dos">
+                                        </div>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label class="col-form-label text-right">What not to do ?</label>
+                                        <div class="col-sm-9 summernote" id="dont">
+                                        </div>
+                                    </div>
+                                    <div class="col float-right">
+                                        <button type="submit" class="btn btn-primary btn-sm float-right"> <i class="fas fa-plus mr-1"></i> Save </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-6">
+                        <form id="frmDiseaseRelatedVideo" asp-controller="Disease" asp-action="SaveRelatedVideo" data-ajax="true" data-ajax-method="POST" data-ajax-success="onSaveRelatedVideoSuccess">
+                            <div class="card border border-primary">
+                                <div class="card text-medium text-gray-900">
+                                    <div class="card-header w-100 bg-secondary text-white text-center"> Related youtube videos..</div>
+                                    <div class="card-body">
+                                        <div class="card shadow">
+                                            <div class="card-body">
+                                                <input asp-for="DiseaseId" type="hidden" />
+                                                <input asp-for="DiseaseRelatedVideo.DiseaseRelatedVideoId" type="hidden" />
+                                                <div class="row form-group ">
+                                                    <label class="col-xl-3 col-sm-12 col-form-label text-right">Video Title </label>
+                                                    <div class="col-xl-9 col-sm-12">
+                                                        <input asp-for="DiseaseRelatedVideo.VideoTitle" id="VideoTitle" class="form-control text-medium" />
+                                                        <span asp-validation-for="DiseaseRelatedVideo.VideoTitle" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group ">
+                                                    <label class="col-xl-3 col-sm-12 col-form-label text-right">Youtube link: </label>
+                                                    <div class="col-xl-9 col-sm-12 ">
+                                                        <input asp-for="DiseaseRelatedVideo.VideoUrl" id="VideoUrl" class="form-control text-medium" />
+                                                        <span asp-validation-for="DiseaseRelatedVideo.VideoUrl" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col float-right btn-group">
+                                                    <button class="btn btn-primary btn-sm float-right"> <i class="fas fa-save mr-1"></i> Save Video</button>
+                                                    <button class="btn btn-danger btn-sm float-right ml-1" type="button" onclick="clearVideo()"> <i class="fas fa-trash mr-1"></i> Clear Video</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="card">
+                                            <div class="card-header bg-secondary text-white"> Realted videos..</div>
+                                            <div class="card-body">
+                                                <ul class="list-group list-group-flush rVideos">
+                                                    @foreach (var item in Model.RelatedVideos)
+                                                    {
+                                                        <li class="list-group-item">
+                                                            <div class="row form-group">
+                                                                <label class="col-sm-8">@item.VideoTitle</label>
+                                                                <div class="col-sm-4 float-right btn-group">
+                                                                    <button class="btn btn-sm btn-primary text-small float-right rounded" type="button" onclick="btnShowHide(this)"><i class="fas fa-toggle-on mr-1"></i>View</button>
+                                                                    <button class="btn btn-sm btn-danger ml-1 text-small float-right rounded" type="button" onclick="deleteRelatedVideo(@item.DiseaseRelatedVideoId, this)"><i class="fas fa-trash mr-1"></i>Remove</button>
+                                                                    <button class="btn btn-sm btn-secondary ml-1 text-small float-right rounded" type="button" data-url="@item.VideoUrl" data-title="@item.VideoTitle" onclick="editRelatedVideo(@item.DiseaseRelatedVideoId, this)"><i class="fas fa-edit mr-1"></i> Edit</button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group vId" style="display:none">
+                                                                <div class="embed-responsive embed-responsive-16by9">
+                                                                    <iframe class="embed-responsive-item" src="@item.VideoUrl" allowfullscreen></iframe>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('.summernote').summernote({
+            height: 150,   //set editable area's height
+            codemirror: { // codemirror options
+                theme: 'monokai'
+            }
+        });
+
+        $('form').each(function () {
+            if ($(this).data('validator'))
+                $(this).data('validator').settings.ignore = ".note-editor *";
+        });
+
+        $("#frmDisease").submit(function () {
+
+            $('#DiseaseRelatedVideo_DiseaseRelatedVideoId').val(0);
+
+            var code = $('#symptomes').summernote('code');
+            var plainText = $("<textarea />").html(code).text();
+            $('#Symptomes').val(plainText);
+            $('#Dos').val($('#dos').summernote('code'));
+            $('#Dont').val($('#dont').summernote('code'));
+            $('#Description').val($('#description').summernote('code'));
+            $('#HotLineNumbers').val($('#hotlineNumbers').summernote('code'));
+        });
+
+        loadEditorValues();
+    });
+
+    function loadEditorValues() {
+        var symptomes = $("<textarea />").html('@Model.Symptomes').text();
+        $('#symptomes').summernote('code', '');
+        $('#symptomes').html(escape($('#symptomes').summernote('code', symptomes)));
+
+        var dos = $("<textarea />").html('@Model.Dos').text();
+        $('#dos').summernote('code', '');
+        $('#dos').html(escape($('#dos').summernote('code', dos)));
+
+        var dont = $("<textarea />").html('@Model.Dont').text();
+        $('#dont').summernote('code', '');
+        $('#dont').html(escape($('#dont').summernote('code', dont)));
+
+        var description = $("<textarea />").html('@Model.Description').text();
+        $('#description').summernote('code', '');
+        $('#description').html(escape($('#description').summernote('code', description)));
+
+        var hotlineNumbers = $("<textarea />").html('@Model.HotLineNumbers').text();
+        $('#hotlineNumbers').summernote('code', '');
+        $('#hotlineNumbers').html(escape($('#hotlineNumbers').summernote('code', hotlineNumbers)));
+}
+
+</script>
+

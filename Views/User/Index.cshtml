@@ -1,0 +1,64 @@
+﻿<div>
+    <br />
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1">
+                <input type="button" id="btnAdd" class="btn btn-primary" value="Add">
+            </div>
+            <div class="col-md-1">
+                <input type="button" id="btnUpdate" class="btn btn-primary" value="Update">
+            </div>
+            <div class="col-md-1">
+                <input type="button" id="btnDelete" class="btn btn-danger" value="Delete">
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <table id="tblUser"
+           data-toggle="table"
+           data-url="User/GetAllUsers"
+           data-pagination="true"
+           data-side-pagination="server"
+           data-page-list="[5, 10, 20, 50, 100, 200]"
+           data-search="true"
+           data-height="300">
+        <thead>
+            <tr>
+                <th data-field="email">UserName</th>
+                <th data-field="fullName" data-align="right">Display Name</th>
+                <th data-field="createdDate" data-align="center">Description</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+
+<environment include="Development">
+    <script src="~/AppJs/User.js"></script>
+</environment>
+<environment include="Production, Staging">
+    <script src="~/js/Bundle/user.min.js"></script>
+</environment>
+
+<script type="text/javascript">
+    $(function () {
+        $.validator.unobtrusive.parse(document);
+        $("#tblUser").bootstrapTable('scrollTo', top);
+
+        $('#btnAdd').on('click',
+            function () {
+                addUpdateUser(false);
+            });
+        $('#btnUpdate').on('click',
+            function () {
+                addUpdateUser(true);
+            });
+        $('#btnDelete').on('click',
+            function () {
+                deleteUser();
+            });
+        $('#btnSubmit').on('click')
+    });
+</script>
+

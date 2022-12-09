@@ -1,0 +1,94 @@
+﻿@model FutsalGoal.Model.AppModels.Medical.ViewModel.JobVacancyViewModel
+
+<div class="modal" id="jobVacancyPartialView"></div>
+<div class="container">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-medium w-100 text-center">
+            <i class="fas fa-user mr-1"></i> Job Vacancy Listing !!
+            <div class="col">
+                <div class="float-right text-center">
+                    <button type="button" class="btn btn-sm btn-success rounded-pill text-small" onclick="addUpdateJobVacancy(0)"><i class="fas fa-plus mr-1"></i> Create Vacancy</button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="input-group">
+                            <div class="col-sm-12 col-md-3 form-group mr-3">
+                                Start Date <input asp-for="StartDate" class="form-control text-small text-center mr-1">
+                            </div>
+                            <div class="col-sm-12 col-md-3  form-group mr-3">
+                                End Date  <input asp-for="EndDate" class="form-control text-small text-center mr-1">
+                            </div>
+                            <div class="col-sm-12 col-md-2  form-group mr-3 mb-2">
+                                Is Active Only <input asp-for="isActiveOnly" class="form-check bs-checkbox text-small text-center mr-1">
+                            </div>
+                            <div class="col-sm-12 col-md-3  form-group mr-3 mb-2">
+                                <button class="btn btn-primary rounded btn-sm" onclick="searchJobVacancy()"><i class="fa fa-search mr-2"></i> Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="bg-secondary" />
+        <div class="card text-medium">
+            <table id="tblJobVacancy"
+                   data-toggle="true"
+                   data-side-pagination="server"
+                   data-pagination="true"
+                   data-height="100vh"
+                   data-page-size="10"
+                   data-page-list="[1,10,20,50,200]"
+                   data-maintain-selected="true"
+                   data-click-to-select="true"
+                   data-single-select="true"
+                   data-query-params="queryJobVacancyParam"
+                   data-url="JobVacancy/GetAllJobVacancy">
+                <thead>
+                    <tr>
+                        <th data-field="Selected" data-checkbox="true"></th>
+                        <th data-formatter="runningFormatter">S.No</th>
+                        <th data-field="medicalOrgName">Medical Name</th>
+                        <th data-field="title">Job Title</th>
+                        <th data-field="salary">Salary</th>
+                        <th data-field="applyBefore" data-formatter="dateFormatter">Apply Before</th>
+                        <th data-field="isActive">Is Active</th>
+                        <th data-field="createdDate" data-formatter="dateFormatter">Created On</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<environment include="Development">
+    <script src="~/AppJs/job_vacancy.js"></script>
+</environment>
+<environment include="Production, Staging">
+    <script src="~/js/Bundle/job_vacancy.min.js"></script>
+</environment>
+
+<script type="text/javascript">
+    $(function () {
+        initTable('#tblJobVacancy');
+        $("#tblJobVacancy").bootstrapTable({
+
+            beforeContextMenuRow: function (e, row, buttonElement) {
+                setTableContextMenu("#tblJobVacancy", e, "jobVacancyId", row.jobVacancyId, '#context-menu-admin');
+            },
+            onContextMenuItem: function (row, el) {
+                var command = $(el[0]).attr('data-val');
+                if (command === "Delete") {
+                    deleteJobVacancy(row.jobVacancyId);
+                }
+                else if (command === "Edit") {
+                    addUpdateJobVacancy(row.jobVacancyId);
+                }
+            }
+        });
+    });
+</script>
+

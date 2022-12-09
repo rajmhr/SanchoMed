@@ -1,0 +1,49 @@
+﻿@model int
+
+@{ var errorTitle = "Oops !! We are not able to process your request. ";
+    var errorBody = "Please check with us later or you can contact administrator directly.";
+    var image = "/images/access_denied.png";
+    if (Model == 401)
+    {
+        errorTitle = "You are not authorized to access this page.";
+        errorBody = "If you think you should have access to resources. Please contact administrator directly.";
+    } }
+
+<div class="container">
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <h1 class="text-danger text-center">
+                        Oops !!
+                    </h1>
+                    <h4 class="text-danger text-center">
+                        @errorTitle
+                    </h4>
+                    <div class="text-center">
+                        <img src='@image' style="width:60%; height:30%" />
+                    </div>
+                    <br />
+                    <h5 class="text-center text-info">
+                        @errorBody
+                    </h5>
+
+                    <br />
+                    <div class="form-group">
+                        <div class="float-right">
+                            <a asp-action="Login" asp-controller="User" class="btn btn-sm bg-success text-white">
+                                <i class="fa fa-user mr-2"></i>
+                                Login to continue
+                            </a>
+
+                            <a asp-action="Index" asp-controller="ContactUs" class="btn btn-sm bg-danger text-white">
+                                <i class="fa fa-phone mr-2"></i>
+                                Contact Support
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

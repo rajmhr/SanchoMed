@@ -1,0 +1,108 @@
+﻿@model FutsalGoal.Model.AppModels.Medical.JobVacancyModel
+@Html.AntiForgeryToken()
+
+<div class="modal-dialog modal-lg  text-medium">
+    <div class="modal-content">
+        <form asp-controller="JobVacancy" asp-action="SaveJobVacancy" id="frmJobVacancy" data-ajax="true" data-ajax-method="POST" data-ajax-success="onSaveJobVacancy" data-ajax-begin="onStartJobVacancy">
+            <div class="modal-header bg-primary text-white p-2">
+                <h6 class="modal-title w-100 text-center">
+                    Job vacancy information !!
+                </h6>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            </div>
+            <div class="modal-body">
+
+                <div class="card shadow">
+                    <div class="card-body">
+                        <input asp-for="MedicalId" type="hidden" />
+                        <input asp-for="JobVacancyId" type="hidden" />
+                        <div class="row form-group">
+                            <label class="col-sm-3 col-form-label text-primary text-medium">Select Medical </label>
+                            <div class="col-sm-12 col-xs-12 col-lg-9">
+                                <select id="medOrgSelect" class="form-control text-small" data-url='@Url.Content("~/MedicalOrg/GetMedicalOrgs")'></select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-3 col-form-label">Job Title</label>
+                            <div class="col-md-9">
+                                <input asp-for="Titile" class="form-control text-small" />
+                                <span asp-validation-for="Titile" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-3 col-form-label">Description</label>
+                            <div class="col-md-9">
+                                <textarea asp-for="Description" rows="5" cols="10" class="form-control text-small"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-3 col-form-label">No Of Candidates</label>
+                            <div class="col-md-9">
+                                <input asp-for="NoOfOpenings" rows="5" cols="10" class="form-control text-small"/>
+                                <span asp-validation-for="NoOfOpenings" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-md-3 col-form-label">Salary</label>
+                            <div class="col-md-9">
+                                <input asp-for="Salary" class="form-control text-small" />
+                                <span asp-validation-for="Salary" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-md-3 col-form-label">Apply before</label>
+                            <div class="col-md-9">
+                                <input asp-for="ApplyBefore" class="form-control text-small" />
+                                <span asp-validation-for="ApplyBefore" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-md-3 col-form-label">HR EmailId</label>
+                            <div class="col-md-9">
+                                <input asp-for="MedicalHREmailId" class="form-control text-small" />
+                                <span asp-validation-for="MedicalHREmailId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <label class="col-md-3 col-form-label">Is Active</label>
+                            <div class="col-md-9">
+                                <input asp-for="IsActive" class="bs-checkbox text-small" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col">
+                        <div class="float-right">
+                            <button class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fas fa-fw fa-times mr-1"></i>Cancel</button>
+                            <button class="btn btn-sm btn-primary" type="submit" id="submit"><i class="fas fa-fw fa-save mr-1"></i> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        loadMedicalOrgs();
+        if (@Model.JobVacancyId != null && @Model.JobVacancyId != 0) {
+            setMedicalOrg(@Json.Serialize(Model));
+        }
+        $('#medOrgSelect').on('select2:select', function (e) {
+            console.log(e.params.data.id);
+            $('#MedicalId').val(e.params.data.id)
+        });
+        $('#medOrgSelect').on('select2:clear', function (e) {
+            $('#MedicalId').val(0)
+        });
+    })
+</script>
+

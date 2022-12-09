@@ -1,0 +1,82 @@
+@model FutsalGoal.Model.Models.ConfigChoiceModel
+
+<div class="modal" id="configPartialView"></div>
+
+<div class="container">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white text-medium w-100 text-center">
+            <i class="fas fa-cog mr-1"></i> Config Choices !!
+        </div>
+        <div class="card-body">
+            <div class="card text-medium shadow">
+                <div class="card-body">
+                    <div class="row form-group text-small">
+                        <div class="col-sm-12 col-lg-3">
+                            @Html.DropDownListFor(a => a.ConfigChoiceCategoryId, Model.DrpConfigCategory.Select(n => new SelectListItem { Text = n.Description, Value = n.ConfigChoiceCategoryId.ToString() }), "Select Category", new { @class = "form-control text-small", onchange = "loadConfigChoices()" })
+                        </div>
+                        <div class="col">
+                            <div class="float-right">
+                                <button type="button" onclick="addUpdateConfigChoice(0)" class="btn btn-sm btn-primary rounded-pill"><i class="fas fa-fw fa-plus mr-1"></i> Add Configs</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="bg-secondary" />
+            <div class="card text-medium">
+                <table id="tblConfigChoice"
+                       data-toggle="true"
+                       data-pagination="true"
+                       data-side-pagination="server"
+                       data-height="100vh"
+                       data-click-to-select="true"
+                       data-maintain-selected="true"
+                       data-search="true"
+                       data-single-select="true"
+                       data-query-params="addExtraParam"
+                       data-url="ConfigChoice/GetConfigChoiceList">
+                    <thead>
+                        <tr>
+                            <th data-field="Selected" data-checkbox="true"></th>
+                            <th data-field="choiceCode">Choice Code</th>
+                            <th data-field="choiceCodeDesc">Description</th>
+                            <th data-field="isActive">Active</th>
+                            <th data-field="value">Value</th>
+                            <th data-field="category">Category</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<environment include="Development">
+    <script src="~/AppJs/ConfigChoice.js"></script>
+</environment>
+<environment include="Production, Staging">
+    <script src="~/js/Bundle/configchoice.min.js"></script>
+</environment>
+
+<script type="text/javascript">
+    $(function () {
+        initTable('#tblConfigChoice');
+
+        $("#tblConfigChoice").bootstrapTable({
+            beforeContextMenuRow: function (e, row, buttonElement) {
+                setTableContextMenu("#tblConfigChoice", e, "configChoiceId", row.configChoiceId, '#context-menu-action');
+            },
+            onContextMenuItem: function (row, el) {
+                var command = $(el[0]).attr('data-val');
+                console.log(command);
+                if (command === "Delete") {
+                    deleteConfigChoice(row.configChoiceId);
+                }
+                else if (command === "Edit") {
+                    addUpdateConfigChoice(row.configChoiceId);
+                }
+            }
+        });
+    });
+</script>
+

@@ -1,0 +1,76 @@
+﻿@model FutsalGoal.Model.AppModels.Doctors.DoctorOrgModel
+
+@Html.AntiForgeryToken()
+
+<div class="modal-dialog text-medium modal-lg" id="scheduleModal">
+    <div class="modal-content">
+        <form  id="frmMedicalDoctor" data-ajax="true" data-ajax-method="POST">
+
+            <div class="modal-header bg-primary text-white p-2">
+                <h6 class="modal-title w-100 text-center">
+                    Update doctor schedule !!
+
+                </h6>
+            </div>
+            <div class="modal-body">
+                <div class="card shadow-lg mb-1">
+                    <div class="card-body">
+                        <input asp-for="OrgMedicalDoctorId" type="hidden" />
+                        <div class="row form-group">
+                            <label class="col-sm-3 text-right col-form-label text-gray-900">Doctors Schedule :</label>
+                            <div class="col-sm-9">
+                                <textarea asp-for="Schedule" class="text-small form-control text-gray-900" rows="5" cols="10"></textarea>
+                                <span asp-validation-for="Schedule" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col">
+                        <div class="float-right">
+                            <button class="btn btn-sm btn-danger" type="button" onclick="closeScheduleModal()"><i class="fas fa-fw fa-times mr-1"></i>Cancel</button>
+                            <button class="btn btn-sm btn-primary" type="button" onclick="saveDoctorsSchedule()"><i class="fas fa-fw fa-save mr-1"></i> Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        $('#scheduleModal').css("margin-top", $(window).height() / 2 - $('.modal-content').height() / 4);
+    });
+
+    function closeScheduleModal() {
+        $('#schedulePartialView').hide();
+    }
+
+    function saveDoctorsSchedule() {
+
+
+        $.ajax({
+            url: "MedicalDoctor/SaveMedicalDoctorSchedule",
+            data: AddAntiForgeryToken({ model: getMedModel() }),
+            type: "POST",
+            success: function (data) {
+                ShowMessage(data.success, data.message);
+                if (data.success) {
+                    $("#tblMappedDoctor").bootstrapTable('refresh');
+                    closeScheduleModal();
+                }
+            }
+        });
+        function getMedModel() {
+            var data = {
+                OrgMedicalDoctorId: $('#OrgMedicalDoctorId').val(),
+                Schedule: $('#Schedule').val(),
+            };
+            return data;
+        }
+}
+
+</script>

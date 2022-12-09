@@ -1,0 +1,138 @@
+@model FutsalGoal.Model.SpModels.UserLoginSpModel
+
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-page="/index">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-people-carry"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">Platform -x</div>
+    </a>
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+    <!-- Nav Item - Home -->
+    <li class="nav-item @Html.IsSelected(actions: "Index", controllers: "Dashboard")">
+        <a asp-action="Index" asp-controller="Dashboard" class="nav-link">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Home</span>
+        </a>
+    </li>
+
+    <hr class="sidebar-divider">
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Admin Controls
+    </div>
+
+    <li class="nav-item @Html.IsSelected(actions: "Index", controllers: "UserDetail")">
+        <a asp-action="Index" asp-controller="UserDetail" class="nav-link">
+            <i class="fas fa-fw fa-users-cog"></i>
+            <span>Users</span>
+        </a>
+    </li>
+
+
+    <li class="nav-item @Html.IsSelected(actions: "Index", controllers: "ConfigChoice")">
+        <a asp-action="Index" asp-controller="ConfigChoice" class="nav-link">
+            <i class="fas fa-cogs"></i>
+            <span>Configs</span>
+        </a>
+    </li>
+
+    <li class="nav-item @Html.IsSelected(actions: "Index", controllers: "ConfigChoiceCategory")">
+        <a asp-action="Index" asp-controller="ConfigChoiceCategory" class="nav-link">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Config category</span>
+        </a>
+    </li>
+
+    <li class="nav-item @Html.IsSelected(actions: "Index", controllers: "ControllerAction")">
+        <a asp-action="Index" asp-controller="ControllerAction" class="nav-link">
+            <i class="fas fa-adjust"></i>
+            <span>Controller Action</span>
+        </a>
+    </li>
+
+    <li class="nav-item @Html.IsSelected(actions: "Index", controllers: "Cache")">
+        <a asp-action="Index" asp-controller="Cache" class="nav-link">
+            <i class="fas fa-retweet"></i>
+            <span> Cache Management </span>
+        </a>
+    </li>
+
+    <hr class="sidebar-divider">
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Medical Org
+    </div>
+
+    <li class="nav-item @Html.IsSelected(actions: "Index", controllers: "FutsalOrg")">
+        <a asp-action="Index" asp-controller="FutsalOrg" class="nav-link">
+            <i class="fas fa-futbol"></i>
+            <span> Organizations </span>
+        </a>
+    </li>
+
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseManage" aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Medical</span>
+        </a>
+        <div id="collapseManage" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a asp-action="Index" asp-controller="MedicalOrg" class="collapse-item @Html.IsSelected(actions: "Index", controllers: "MedicalOrg")">Medical Orgs</a>
+                <a asp-action="Index" asp-controller="MedicalDoctor" class="collapse-item @Html.IsSelected(actions: "Index", controllers: "MedicalDoctor")">Medical Doctors</a>
+                <a asp-action="Index" asp-controller="Medicine" class="collapse-item @Html.IsSelected(actions: "Index", controllers: "Medicine")">Medicines</a>
+                <a asp-action="Index" asp-controller="Disease" class="collapse-item @Html.IsSelected(actions: "Index", controllers: "Disease")">Disease</a>
+                <a asp-action="Index" asp-controller="Nutrition" class="collapse-item @Html.IsSelected(actions: "Index", controllers: "Nutrition")">Nutritions</a>
+                <a asp-action="Index" asp-controller="MedicalEmergency" class="collapse-item @Html.IsSelected(actions: "Index", controllers: "MedicalEmergency")">Medical Emergency</a>
+                <a asp-action="Index" asp-controller="JobVacancy" class="collapse-item @Html.IsSelected(actions: "Index", controllers: "JobVacancy")">Job vacancy</a>
+            </div>
+        </div>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMedicalAI" aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>Medical AI</span>
+        </a>
+        <div id="collapseMedicalAI" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a asp-action="Index" asp-controller="DiseaseAI" class="collapse-item @Html.IsSelected(actions: "Index", controllers: "DiseaseAI")">Disease AI</a>
+                <a asp-action="Index" asp-controller="MedicalDoctor" class="collapse-item @Html.IsSelected(actions: "Index", controllers: "MedicalDoctor")">Symptomes</a>
+                <a asp-action="Index" asp-controller="Medicine" class="collapse-item @Html.IsSelected(actions: "Index", controllers: "Medicine")">Symptomes of Diseases</a>
+                <a asp-action="Index" asp-controller="Disease" class="collapse-item @Html.IsSelected(actions: "Index", controllers: "Disease")">Disease Prediction</a>
+            </div>
+        </div>
+    </li>
+
+
+    <hr class="sidebar-divider">
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        More Info
+    </div>
+    <!-- Nav Item - User -->
+
+    <li class="nav-item @Html.IsSelected(actions: "Index", controllers: "AboutUs")">
+        <a asp-action="Index" asp-controller="Aboutus" class="nav-link">
+            <i class="fas fa-fw fa-info"></i>
+            <span>About Us</span>
+        </a>
+    </li>
+    <li class="nav-item @Html.IsSelected(actions: "Index", controllers: "Contactus")">
+        <a asp-action="Index" asp-controller="Contactus" class="nav-link ">
+            <i class="fas fa-fw fa-comment"></i>
+            <span>Feedback</span>
+        </a>
+    </li>
+    <li class="nav-item @Html.IsSelected(actions: "Index", controllers: "Help")">
+        <a asp-action="Index" asp-controller="Help" class="nav-link ">
+            <i class="fas fa-fw fa-question"></i>
+            <span>FAQ</span>
+        </a>
+    </li>
+
+
+</ul>
